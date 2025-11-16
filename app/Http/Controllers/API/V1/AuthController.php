@@ -23,7 +23,7 @@ class AuthController extends Controller
     {
         $user = $this->authService->register($request->validated());
         $token = $user->createToken('auth_token')->plainTextToken;
-        print_r($token);
+       // print_r($token);
 
         return response()->json([
             'message' => 'User registered successfully.',
