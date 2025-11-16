@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('aboutus')->nullable();
-
             $table->foreignId('location_id')->constrained('locations')->nullOnDelete();
             $table->foreignId(column: 'specialty_id')->constrained('specialties')->nullOnDelete();
+            //
             $table->foreignId('hospital_id')
                 ->nullable()
                 ->constrained('hospitals')
