@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hospital;
+use App\Models\Location;
 use Illuminate\Http\Request;
 
 class HospitalController extends Controller
@@ -17,9 +18,25 @@ class HospitalController extends Controller
         'website'=> 'nullable|url',
         'address'=>'required|string',
         'image'=> 'nullable|sring',
-        'location_id'=>'required|integer|exists:locations,id',
+        'location.lat'=>'required|numeric',
+        'location.lng'=>'required|numeric',
+        'location.name'=>'nullable|string',
     ]);
-    $hospital=Hospital::create($valdiate_data);
+      $location_data = Location::create([
+        'lat'  => $valdiate_data['location']['lat'],
+        'lng'  => $valdiate_data['location']['lng'],
+        'name' => $valdiate_data['location']['name'] ?? null,
+    ]);
+        $hospital = Hospital::create([
+        'name'        => $valdiate_data['name'],
+        'phone'       => $valdiate_data['phone'],
+        'email'       => $valdiate_data['email'],
+        'address'     => $valdiate_data['address'],
+        'location_id' => $location_data->id,  
+    ]);
+
+
+    $hospital->save();
     $hospital->load('location');
     return response()->json([
         'message' => 'hospital created successfully',
@@ -28,45 +45,68 @@ class HospitalController extends Controller
 
     }
 
-//    public function update(Request $request, $id)
-//         {
-//             $specialty = Specialty::findOrFail($id);
+public function updateHospital(Request $request,$id)
+{
+    
+    $hospital = Hospital::with('location')->findOrFail($id);
 
-//             $request->validate([
-//                 'name'      => 'sometimes|string|max:255',
-//                 'icon'      => 'nullable|string',
-//                 'is_active' => 'boolean',
-//             ]);
+    $validated = $request->validate([
+        'name' => 'sometimes|string',
+        'phone' => 'sometimes|string',
+        'email' => 'sometimes|email|unique:hospitals,email,' . $hospital->id,
+        'address' => 'sometimes|string',
 
-//             $specialty->update([
-//                 'name'=> $request->name ?? $specialty->name,
-//                 'icon'=> $request->icon ?? $specialty->icon,
-//                 'is_active' => $request->is_active ?? $specialty->is_active,
-//             ]);
+       //location data
+        'location.lat' => 'sometimes|numeric',
+        'location.lng' => 'sometimes|numeric',
+        'location.name' => 'sometimes|string',
+    ]);
 
-//             return response()->json([
-//                 'message' => 'Specialty updated successfully',
-//                 'data' => $specialty
-//             ],200);
-//         }
+    
+    $hospital->update([
+        'name' => $validated['name'] ?? $hospital->name,
+        'phone' => $validated['phone'] ?? $hospital->phone,
+        'email' => $validated['email'] ?? $hospital->email,
+        'address' => $validated['address'] ?? $hospital->address,
+    ]);
+
+    //update location 
+    if (isset($validated['location'])) {
+        $hospital->location->update($validated['location']);
+    }
+
+    return response()->json([
+        'message' => 'Hospital updated successfully',
+        'data' => $hospital->load('location')
+    ], 200);
+}
 
 
-//     public function delete($id)
-//     {
-//         $specialty = Specialty::findOrFail($id);
-//         $specialty->delete();
 
-//         return response()->json([
-//             'message' => 'Specialty deleted successfully'
-//         ]);
-//     }
+    public function deleteHospital($id)
+    {
+        $hospital = Hospital::with('location')->findOrFail($id);
+        $hospital->delete();
 
-//     public function index()
-//     {
+        return response()->json([
+            'message' => 'Specialty deleted successfully'
+        ]);
+    }
 
-//         $specialty=Specialty::all();
-//         return response()->json(
-//             ['data'=>$specialty],200
-//         );
-//     }
+    public function getSearchHospital()
+    {
+
+        $hospital=Hospital::with('location')->get();
+        return response()->json(
+            ['data'=>$hospital],200
+        );
+    }
+    public function hospitalSearch(Request $request)
+    {
+        $name=$request->input('name');
+        $hospitalSearch=Hospital::with('location')->where('name','LIKE',"%$name%")->get();
+        return response()->json([
+            'data'=>$hospitalSearch
+        ]);
+    }
 }

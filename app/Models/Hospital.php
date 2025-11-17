@@ -10,14 +10,15 @@ class Hospital extends Model
 
     protected $table = 'hospitals';
 
-    protected $fillable = [
-        'name',
-        'email',
-        'address',
-        'phone',
-        'image',
-        'location_id',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'address',
+    //     'phone',
+    //     'image',
+    //     'location_id',
+    // ];
+    protected $guarded=[];
 
     public function location()
     {
