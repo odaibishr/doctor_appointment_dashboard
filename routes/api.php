@@ -1,15 +1,21 @@
 <?php
 
 use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Controllers\API\V1\BookAppointmentController;
 use App\Http\Controllers\API\V1\DayController;
 use App\Http\Controllers\API\V1\DoctorController;
 use App\Http\Controllers\API\V1\DoctorDaysOffController;
 use App\Http\Controllers\API\V1\DoctorScheduleController;
+use App\Http\Controllers\API\V1\FavoriteDoctorController;
 use App\Http\Controllers\API\V1\HospitalController;
 use App\Http\Controllers\API\V1\LocationController;
+use App\Http\Controllers\API\V1\NotificationController;
 use App\Http\Controllers\API\V1\SpecialtyController;
 use App\Http\Controllers\API\V1\PaymentGatewayDetailController;
+use App\Http\Controllers\API\V1\ReviewsController;
 use App\Http\Controllers\API\V1\TransicationController;
+use App\Models\BookAppointment;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -76,7 +82,26 @@ Route::prefix('v1')->group(function () {
             Route::post('createTranscation', 'createTranscation');
             Route::delete('deleteTranscation/{id}','deleteTranscation');
         });
-        
+          Route::prefix('review')->controller(ReviewsController::class)->group(function () {  
+            Route::post('createReview', 'createReview');
+            Route::delete('deleteReview/{id}','deleteReview');
+            Route::get('getReviewByDoctor/{doctorId}','getReviewByDoctor');
+        });
+        Route::prefix('favorite')->controller(FavoriteDoctorController::class)->group(function () {  
+            Route::post('addFavoriteDoctor', 'addFavoriteDoctor');
+            Route::delete('deleteFavoriteDoctor/{id}','deleteFavoriteDoctor');
+            Route::get('getUserFavoriteDoctor','getUserFavoriteDoctor');
+        });
+        Route::prefix('notification')->controller(NotificationController::class)->group(function () {  
+            Route::post('sendNotification', 'sendNotification');
+
+        });
+            Route::prefix('appointment')->controller(BookAppointmentController::class)->group(function () {  
+            Route::post('createAppointment', 'createAppointment');
+            Route::delete('deleteAppointment/{id}','deleteAppointment');
+            Route::get('getUserAppointment','getUserAppointment');
+            Route::put('updateAppointmentStatus/{doctor_id}','updateAppointmentStatus');
+        });
     });
      
 }

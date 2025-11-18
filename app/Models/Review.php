@@ -10,10 +10,14 @@ class Review extends Model
     protected $table = 'reviews';
 
     protected $fillable = [
-        'patient_id',
+        'user_id',
         'doctor_id',
         'rating',
         'comment',
+    ];
+    protected $hidden = [
+        "created_at",
+        "updated_at"
     ];
 
     public function doctor()

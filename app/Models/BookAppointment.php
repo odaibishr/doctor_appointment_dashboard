@@ -46,7 +46,7 @@ class BookAppointment extends Model
 
     public function paymentGatewayDetail()
 {
-    return $this->hasOne(BookAppointment::class, 'transaction_id', 'id');
+    return $this->hasOne(PaymentGatewayDetail::class, 'transaction_id', 'id');
 }
 
 }

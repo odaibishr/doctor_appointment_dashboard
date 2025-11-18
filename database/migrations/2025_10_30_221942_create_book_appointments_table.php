@@ -35,7 +35,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->boolean('is_completed')->default(false);
 
-            $table->enum('payment_mode', ['cash', 'online'])->nullable();
+            $table->enum('payment_mode', ['cash', 'online']);
 
             $table->timestamps();
         });
