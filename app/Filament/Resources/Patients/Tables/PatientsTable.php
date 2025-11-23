@@ -16,12 +16,13 @@ class PatientsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+
+                TextColumn::make('user.name')
                     ->label('Full Name')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('email')
+                TextColumn::make('user.email')
                     ->label('Email Address')
                     ->searchable()
                     ->sortable(),
@@ -30,8 +31,8 @@ class PatientsTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('birth_day')
-                    ->label('Birthday')
+                TextColumn::make('birth_date')
+                    ->label('Birth Date')
                     ->date()
                     ->sortable()
                     ->toggleable(),
@@ -40,6 +41,7 @@ class PatientsTable
                     ->label('Profile'),
 
                 TextColumn::make('gender')
+                    ->badge()
                     ->searchable()
                     ->toggleable(),
 

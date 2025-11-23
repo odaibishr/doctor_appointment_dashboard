@@ -14,6 +14,7 @@ use App\Http\Controllers\API\V1\SpecialtyController;
 use App\Http\Controllers\API\V1\PaymentGatewayDetailController;
 use App\Http\Controllers\API\V1\ReviewsController;
 use App\Http\Controllers\API\V1\TransicationController;
+use App\Http\Controllers\API\V1\PatientController;
 use App\Models\BookAppointment;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::prefix('v1')->group(function () {
          Route::middleware('auth:sanctum')->group(function () {
              Route::get('me', 'me');
             Route::post('logout', 'logout');
+            Route::post('/patients', [PatientController::class, 'store']);
         //specialty
          Route::prefix('specialty')->controller(SpecialtyController::class)->group(function () {
             Route::get('index', 'index');
