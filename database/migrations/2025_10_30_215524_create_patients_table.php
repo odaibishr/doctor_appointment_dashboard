@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('profile_image')->nullable();
 
             $table->string('gender');
-            $table->foreignId('user_id')->constrained('users')->nullOnDelete();
-            $table->foreignId('location_id')->constrained('locations')->nullOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('location_id')->constrained('locations')->cascadeOnDelete();
             $table->timestamps();
         });
     }

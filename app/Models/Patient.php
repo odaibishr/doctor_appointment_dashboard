@@ -17,7 +17,6 @@ class Patient extends Model
         'location_id',
     ];
 
-
     public function location()
     {
         return $this->belongsTo(Location::class);
@@ -43,7 +42,8 @@ class Patient extends Model
         return $this->hasMany(Notification::class);
     }
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->hasOne(User::class);
     }
 }
