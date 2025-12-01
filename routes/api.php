@@ -93,6 +93,7 @@ Route::prefix('v1')->group(function () {
             Route::get('getUserAppointment','getUserAppointment');
             Route::put('updateAppointmentStatus/{doctor_id}','updateAppointmentStatus');
         });
+
           Route::prefix('paymentMethod')->controller(PaymentMethodController::class)->group(function () {  
            Route::get('paymentmethods', 'index');
         Route::post('paymentmethod/create', 'store');
