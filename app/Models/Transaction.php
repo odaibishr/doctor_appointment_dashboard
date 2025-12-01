@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Transaction extends Model
 {
-    //
+    
     protected $fillable = [
-        'id',
+        'user_id',
+        'payment_method_id', 
         'amount',
-        'payment_gateway_detail_id',
+        'status',
     ];
 
     public function paymentGatewayDetail()

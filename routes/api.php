@@ -1,23 +1,15 @@
 <?php
 
-use App\Http\Controllers\API\V1\AuthController;
-use App\Http\Controllers\API\V1\BookAppointmentController;
-use App\Http\Controllers\API\V1\DayController;
-use App\Http\Controllers\API\V1\DoctorController;
-use App\Http\Controllers\API\V1\DoctorDaysOffController;
-use App\Http\Controllers\API\V1\DoctorScheduleController;
-use App\Http\Controllers\API\V1\FavoriteDoctorController;
-use App\Http\Controllers\API\V1\HospitalController;
-use App\Http\Controllers\API\V1\LocationController;
-use App\Http\Controllers\API\V1\NotificationController;
-use App\Http\Controllers\API\V1\SpecialtyController;
-use App\Http\Controllers\API\V1\PaymentGatewayDetailController;
-use App\Http\Controllers\API\V1\ReviewsController;
-use App\Http\Controllers\API\V1\TransicationController;
-use App\Http\Controllers\API\V1\PatientController;
-use App\Models\BookAppointment;
-use App\Models\Notification;
+
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\API\V1\{
+    AuthController, BookAppointmentController, DayController, DoctorController,
+    DoctorDaysOffController, DoctorScheduleController, FavoriteDoctorController,
+    HospitalController, LocationController, NotificationController, SpecialtyController,
+    PaymentGatewayDetailController, ReviewsController, TransicationController,
+    PatientController, PaymentMethodController
+};
 
 Route::prefix('v1')->group(function () {
     Route::controller(AuthController::class)->group(function () {
@@ -80,10 +72,7 @@ Route::prefix('v1')->group(function () {
             Route::post('createGatway', 'createGatway');
             Route::delete('deleteGatway/{id}','deleteGatway');
         });
-        Route::prefix('transcation')->controller(TransicationController::class)->group(function () {  
-            Route::post('createTranscation', 'createTranscation');
-            Route::delete('deleteTranscation/{id}','deleteTranscation');
-        });
+        
           Route::prefix('review')->controller(ReviewsController::class)->group(function () {  
             Route::post('createReview', 'createReview');
             Route::delete('deleteReview/{id}','deleteReview');
@@ -104,6 +93,19 @@ Route::prefix('v1')->group(function () {
             Route::get('getUserAppointment','getUserAppointment');
             Route::put('updateAppointmentStatus/{doctor_id}','updateAppointmentStatus');
         });
+          Route::prefix('paymentMethod')->controller(PaymentMethodController::class)->group(function () {  
+           Route::get('paymentmethods', 'index');
+        Route::post('paymentmethod/create', 'store');
+          });
+          Route::prefix('transcation')->controller(TransicationController::class)->group(function () {  
+            Route::post('createTranscation', 'createTranscation');
+            Route::delete('deleteTranscation/{id}','deleteTranscation');
+        });
+     
+
+        
+
+
     });
      
 }
