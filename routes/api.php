@@ -16,9 +16,9 @@ Route::prefix('v1')->group(function () {
         Route::post('register', 'register');
         Route::post('login', 'login');
 
-        
 
          Route::middleware('auth:sanctum')->group(function () {
+            
              Route::get('me', 'me');
             Route::post('logout', 'logout');
             Route::post('/patients', [PatientController::class, 'store']);
@@ -34,6 +34,7 @@ Route::prefix('v1')->group(function () {
             Route::post('createLocation', 'createLocation');
             Route::put('updateLocation/{id}', 'updateLocation');
             Route::delete('deleteLocation/{id}', 'deleteLocation');
+            Route::get('getAllLocation', 'getAllLocation');
         });
           Route::prefix('hospital')->controller(HospitalController::class)->group(function () {  
             Route::post('createHospital', 'createHospital');
@@ -106,7 +107,6 @@ Route::prefix('v1')->group(function () {
         
 
         
-
 
     });
      
