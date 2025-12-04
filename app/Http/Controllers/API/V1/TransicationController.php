@@ -5,37 +5,63 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class TransicationController extends Controller
 {
-      public function createTranscation(Request $request)
+     public function createTranscation(Request $request)
     {
-        $validate_date=$request->validate([
-            'amount' => 'required|decimal:2',
-            'payment_gateway_detail_id' => 'required|exists:payment_gateway_details,id',
+        
+        $user = $request->user();
+    if (!$user) {
+        return response()->json([
+        'status' => 'error',
+        'message' => 'Unauthenticated. Make sure to send Bearer token.'
+    ], 401);
+}
+
+
+       
+        $request->validate([
+
+            'payment_method_id' => 'required|exists:payment_methods,id',
+            'amount' => 'required|numeric|min:0.01',
+            
         ]);
 
-        $transication = Transaction::create($validate_date);
+       
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'payment_method_id' => $request->payment_method_id,
+            'amount' => $request->amount,
+            'status' => 'pending' 
+        ]);
 
         return response()->json([
-            'message' => 'transcation created successfully',
-            'data' => $transication
-        ],201);
+            'status' => 'success',
+            'message' => 'Transaction created successfully',
+            'data' => $transaction
+        ]);
     }
+
+    
     public function deleteTranscation($id)
     {
-        $transcation=Transaction::find($id);
-        if(!$transcation)
-        {
+        $transaction = Transaction::find($id);
+
+        if (!$transaction) {
             return response()->json([
-                'message'=>'transcation not found !'
-            
-            ],404);
+                'status' => 'error',
+                'message' => 'Transaction not found'
+            ], 404);
         }
-        $transcation->delete();
+
+        $transaction->delete();
+
         return response()->json([
-                'message'=>'transcation deleted successfully !'
-            
-            ],404);
+            'status' => 'success',
+            'message' => 'Transaction deleted successfully'
+        ]);
     }
 }

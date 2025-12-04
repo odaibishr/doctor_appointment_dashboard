@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
         function () {
             Route::post('register', 'register');
             Route::post('login', 'login');
-            
+
             // specialty
             Route::prefix('specialty')->controller(SpecialtyController::class)->group(function () {
                 Route::get('index', 'index');
