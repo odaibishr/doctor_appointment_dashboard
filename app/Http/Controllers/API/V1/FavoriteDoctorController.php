@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteDoctorController extends Controller
 {
-    public function addFavoriteDoctor(Request $request)
+    public function ToggleFavoriteDoctor(Request $request)
     {
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
@@ -22,9 +22,8 @@ class FavoriteDoctorController extends Controller
             ->first();
 
         if ($exists) {
-            return response()->json([
-                'message' => 'This doctor is already in favorites'
-            ], 409);
+            $exists->delete();
+            return response()->json(['message' => 'تم إزالة الطبيب من المفضلة'], 200);
         }
 
         $favorite = FavoriteDoctor::create([
@@ -33,29 +32,9 @@ class FavoriteDoctorController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Doctor added to favorites',
+            'message' => 'تم إضافة الطبيب للمفضلة',
             'data' => $favorite
         ], 201);
-    }
-    public function deleteFavoriteDoctor($doctor_id)
-    {
-        $userId = Auth::id();
-
-        $fav = FavoriteDoctor::where('user_id', $userId)
-            ->where('doctor_id', $doctor_id)
-            ->first();
-
-        if (!$fav) {
-            return response()->json([
-                'message' => 'Doctor not found in favorites'
-            ], 404);
-        }
-
-        $fav->delete();
-
-        return response()->json([
-            'message' => 'Doctor removed from favorites'
-        ], 200);
     }
 
     public function getUserFavoriteDoctor()

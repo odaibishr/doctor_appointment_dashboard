@@ -91,8 +91,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('getReviewByDoctor/{doctorId}', 'getReviewByDoctor');
                 });
                 Route::prefix('favorite')->controller(FavoriteDoctorController::class)->group(function () {
-                    Route::post('addFavoriteDoctor', 'addFavoriteDoctor');
-                    Route::delete('deleteFavoriteDoctor/{id}', 'deleteFavoriteDoctor');
+                    Route::post('ToggleFavoriteDoctor', 'ToggleFavoriteDoctor');
                     Route::get('getUserFavoriteDoctor', 'getUserFavoriteDoctor');
                 });
                 Route::prefix('notification')->controller(NotificationController::class)->group(function () {
