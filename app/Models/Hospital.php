@@ -25,8 +25,8 @@ class Hospital extends Model
         return $this->belongsTo(Location::class);
     }
 
-    // public function doctors()
-    // {
-    //     return $this->hasMany(Doctor::class);
-    // }
+    public function doctors()
+    {
+        return $this->hasMany(Doctor::class);
+    }
 }

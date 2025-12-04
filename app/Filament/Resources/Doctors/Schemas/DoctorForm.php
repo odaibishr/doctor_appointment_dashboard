@@ -26,7 +26,7 @@ class DoctorForm
                     ->email()
                     ->required(),
 
-                TextInput::make('password')
+                TextInput::make(name: 'password')
                     ->label('Password')
                     ->password()
                     ->required(),
@@ -40,13 +40,13 @@ class DoctorForm
                 Select::make('gender')
                     ->label('Gender')
                     ->options([
-                        'male' => 'Male',
-                        'female' => 'Female',
+                        'Male' => 'Male',
+                        'Female' => 'Female',
                     ])
                     ->required()
                     ->columnSpan(1),
 
-                DatePicker::make('birth_day')
+                DatePicker::make('birthday')
                     ->label('Birthday')
                     ->columnSpan(1),
 
@@ -86,10 +86,12 @@ class DoctorForm
                 FileUpload::make('profile_image')
                     ->label('Profile Image')
                     ->image()
-                    ->imagePreviewHeight(200)
-                    ->imageCropAspectRatio('1:1')
-                    ->imageResizeTargetHeight(200)
-                    ->imageResizeTargetWidth(200)
+                    // ->imagePreviewHeight(200)
+                    // ->imageCropAspectRatio('1:1')
+                    // ->imageResizeTargetHeight(200)
+                    // ->imageResizeTargetWidth(200)
+                    ->disk('public')
+                    ->directory('doctors')
                     ->columnSpan(2),
 
             ]);

@@ -20,8 +20,9 @@ class Doctor extends Model
         'department_id',
         'gender',
         'is_featured',
+        'is_top_doctor',
         'profile_image',
-        'birth_day',
+        'birthday',
         'services',
         'password',
     ];
@@ -64,5 +65,10 @@ class Doctor extends Model
     public function hospital()
     {
         return $this->belongsTo(Hospital::class);
+    }
+
+    public function favoriteDoctors()
+    {
+        return $this->hasMany(FavoriteDoctor::class);
     }
 }

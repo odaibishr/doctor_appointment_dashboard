@@ -41,4 +41,38 @@ class PatientController extends Controller
             'data' => $patient,
         ], 201);
     }
+
+    public function getPatientData(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'Unauthorized'
+                ], 401);
+            }
+
+            $patient = Patient::where('user_id', $user->id)->first();
+
+            if (!$patient) {
+                return response()->json([
+                    'message' => 'لم يتم العثور على بيانات المريض',
+                    'data' => null,
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'تم الحصول على بيانات المريض بنجاح',
+                'data' => $patient,
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'حدث خطأ داخلي',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

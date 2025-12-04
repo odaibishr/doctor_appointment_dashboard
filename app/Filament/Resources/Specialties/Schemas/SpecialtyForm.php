@@ -21,9 +21,8 @@ class SpecialtyForm
                 FileUpload::make('icon')
                     ->label('Icon')
                     ->image()
-                    ->imagePreviewHeight(100)
-                    ->imageResizeTargetHeight(100)
-                    ->imageResizeTargetWidth(100)
+                    ->disk('public')
+                    ->directory('specialties')
                     ->columnSpan(2),
 
                 Toggle::make('is_active')
