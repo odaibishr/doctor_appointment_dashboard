@@ -55,7 +55,7 @@ Route::prefix('v1')->group(function () {
                     Route::post('createHospital', 'createHospital');
                     Route::put('updateHospital/{id}', 'updateHospital');
                     Route::delete('deleteHospital/{id}', 'deleteHospital');
-                    Route::get('getAllHospital', 'getAllHospital');
+                    Route::get('getAllHospitals', 'getAllHospitals');
                     Route::get('getSearchHospital', 'getSearchHospital');
                 });
 
@@ -65,6 +65,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('getDay', 'getDay');
 
                 });
+                
                 Route::prefix('dayOff')->controller(DoctorDaysOffController::class)->group(function () {
                     Route::post('createDayOff', 'createDayOff');
                     Route::delete('deleteDay/{id}', 'deleteDay');
@@ -91,7 +92,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('getReviewByDoctor/{doctorId}', 'getReviewByDoctor');
                 });
                 Route::prefix('favorite')->controller(FavoriteDoctorController::class)->group(function () {
-                    Route::post('ToggleFavoriteDoctor', 'ToggleFavoriteDoctor');
+                    Route::post('toggle', 'ToggleFavoriteDoctor');
                     Route::get('getUserFavoriteDoctor', 'getUserFavoriteDoctor');
                 });
                 Route::prefix('notification')->controller(NotificationController::class)->group(function () {
