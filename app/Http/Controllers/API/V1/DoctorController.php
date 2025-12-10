@@ -119,38 +119,38 @@ class DoctorController extends Controller
     {
         $userId = auth()->id();
         $query = $request->input('query');
+        $specialtyId = $request->input('specialty_id');
 
-        if (!$query) {
-            $doctors = Doctor::with(['location', 'specialty', 'hospital'])
-                ->withCount([
-                    'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
-                        $query->where('user_id', $userId);
-                    }
-                ])
-                ->get();
-            return response()->json([
-                'data' => $doctors
-            ], 200);
-        }
-
-        $doctors = Doctor::where('name', 'LIKE', "%$query%")
-            ->orWhereHas('specialty', function ($q) use ($query) {
-                $q->where('name', 'LIKE', "%{$query}%");
-            })
-            ->orWhereHas('hospital', function ($q) use ($query) {
-                $q->where('name', 'LIKE', "%{$query}%");
-            })
+        $doctors = Doctor::query()
+            ->with(['location', 'specialty', 'hospital'])
             ->withCount([
-                'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
-                    $query->where('user_id', $userId);
+                'favoriteDoctors as is_favorite' => function ($q) use ($userId) {
+                    $q->where('user_id', $userId);
                 }
             ])
+
+            // Filter by specialty
+            ->when($specialtyId, function ($q) use ($specialtyId) {
+                $q->where('specialty_id', $specialtyId);
+            })
+
+            // Filter by name or hospital name
+            ->when($query, function ($q) use ($query) {
+                $q->where(function ($subQ) use ($query) {
+                    $subQ->where('name', 'LIKE', "%$query%")
+                        ->orWhereHas('hospital', function ($q2) use ($query) {
+                            $q2->where('name', 'LIKE', "%{$query}%");
+                        });
+                });
+            })
+
             ->get();
 
         return response()->json([
             'data' => $doctors
         ], 200);
     }
+
 
     public function getDoctorById($id)
     {
