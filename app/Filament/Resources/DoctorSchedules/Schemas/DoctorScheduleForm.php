@@ -5,6 +5,7 @@ namespace App\Filament\Resources\DoctorSchedules\Schemas;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorScheduleForm
 {
@@ -14,25 +15,29 @@ class DoctorScheduleForm
             ->components([
                 Select::make('doctor_id')
                     ->label('الطبيب')
-                    ->relationship('doctor', 'name') 
+                    ->relationship('doctor', 'name')
                     ->required()
+                    ->default(fn () => Auth::user()?->doctor?->id)
+                    ->disabled(fn () => ! Auth::user()?->isAdmin())
+                    ->hidden(fn () => ! Auth::user()?->isAdmin())
                     ->columnSpan(2),
 
                 Select::make('day_id')
                     ->label('اليوم')
-                    ->relationship('day', 'day_name') 
+                    ->relationship('day', 'day_name')
                     ->required()
                     ->columnSpan(2),
 
                 TimePicker::make('start_time')
-                    ->label('بداية العمل')
+                    ->label('وقت البداية')
                     ->required()
                     ->columnSpan(1),
 
                 TimePicker::make('end_time')
-                    ->label('نهاية العمل')
+                    ->label('وقت النهاية')
                     ->required()
                     ->columnSpan(1),
             ]);
     }
 }
+

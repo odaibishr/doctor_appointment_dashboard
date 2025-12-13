@@ -8,6 +8,8 @@ use App\Filament\Resources\Patients\Pages\ListPatients;
 use App\Filament\Resources\Patients\Schemas\PatientForm;
 use App\Filament\Resources\Patients\Tables\PatientsTable;
 use App\Models\Patient;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,26 @@ class PatientResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return PatientForm::configure($schema);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isPatient()) {
+            return $query->where('user_id', $user->id);
+        }
+
+        return $query->whereRaw('1 = 0');
     }
 
     public static function table(Table $table): Table

@@ -110,11 +110,13 @@ class DoctorsTable
                     ->label('طبيب مميز'),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(fn ($record): bool => auth()->user()?->can('update', $record) ?? false),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->visible(fn (): bool => auth()->user()?->can('deleteAny', \App\Models\Doctor::class) ?? false),
                 ]),
             ]);
     }

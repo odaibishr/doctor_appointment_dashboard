@@ -8,6 +8,7 @@ use App\Filament\Resources\PaymentGatewayDetails\Pages\ListPaymentGatewayDetails
 use App\Filament\Resources\PaymentGatewayDetails\Schemas\PaymentGatewayDetailForm;
 use App\Filament\Resources\PaymentGatewayDetails\Tables\PaymentGatewayDetailsTable;
 use App\Models\PaymentGatewayDetail;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +32,11 @@ class PaymentGatewayDetailResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return PaymentGatewayDetailForm::configure($schema);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public static function table(Table $table): Table

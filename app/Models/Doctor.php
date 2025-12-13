@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Doctor extends Model
 {
     //
 
     protected $fillable = [
+        'user_id',
         'name',
         'email',
         'aboutus',
@@ -32,9 +34,32 @@ class Doctor extends Model
         'remember_token',
     ];
 
+    protected $appends = [
+        'profile_image_url',
+    ];
+
+    public function getProfileImageUrlAttribute(): ?string
+    {
+        $path = (string) ($this->profile_image ?? '');
+        if ($path === '') {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        return Storage::disk('public')->url($path);
+    }
+
     public function specialty()
     {
         return $this->belongsTo(Specialty::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function location()

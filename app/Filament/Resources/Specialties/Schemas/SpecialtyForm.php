@@ -26,8 +26,9 @@ class SpecialtyForm
                     ->columnSpan(2),
 
                 Toggle::make('is_active')
-                    ->label('مفعل')
+                    ->label('نشط')
                     ->columnSpan(1),
             ]);
     }
 }
+

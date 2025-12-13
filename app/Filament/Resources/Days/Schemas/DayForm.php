@@ -12,11 +12,13 @@ class DayForm
         return $schema
             ->components([
                 TextInput::make('day_name')
-                    ->label('اليوم')
+                    ->label('اسم اليوم')
                     ->required(),
+
                 TextInput::make('short_name')
                     ->label('الاختصار')
                     ->required(),
+
                 TextInput::make('day_number')
                     ->label('رقم اليوم')
                     ->required()
@@ -24,3 +26,4 @@ class DayForm
             ]);
     }
 }
+

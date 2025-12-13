@@ -8,6 +8,8 @@ use App\Filament\Resources\Doctors\Pages\ListDoctors;
 use App\Filament\Resources\Doctors\Schemas\DoctorForm;
 use App\Filament\Resources\Doctors\Tables\DoctorsTable;
 use App\Models\Doctor;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,32 @@ class DoctorResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return DoctorForm::configure($schema);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isDoctor()) {
+            $doctorId = $user->doctor?->id;
+
+            return $doctorId ? $query->whereKey($doctorId) : $query->whereRaw('1 = 0');
+        }
+
+        if ($user->isPatient()) {
+            return $query;
+        }
+
+        return $query->whereRaw('1 = 0');
     }
 
     public static function table(Table $table): Table

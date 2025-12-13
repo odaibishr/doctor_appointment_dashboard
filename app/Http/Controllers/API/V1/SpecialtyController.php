@@ -59,9 +59,12 @@ class SpecialtyController extends Controller
     public function index()
     {
 
-        $specialty=Specialty::all();
+        $specialty = Specialty::query()
+            ->where('is_active', true)
+            ->withCount('doctors')
+            ->get();
         return response()->json(
-            ['data'=>$specialty],200
+            ['data' => $specialty], 200
         );
     }
 

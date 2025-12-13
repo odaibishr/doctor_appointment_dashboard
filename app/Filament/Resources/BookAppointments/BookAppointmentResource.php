@@ -8,6 +8,8 @@ use App\Filament\Resources\BookAppointments\Pages\ListBookAppointments;
 use App\Filament\Resources\BookAppointments\Schemas\BookAppointmentForm;
 use App\Filament\Resources\BookAppointments\Tables\BookAppointmentsTable;
 use App\Models\BookAppointment;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -33,6 +35,32 @@ class BookAppointmentResource extends Resource
         return BookAppointmentForm::configure($schema);
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isDoctor()) {
+            $doctorId = $user->doctor?->id;
+
+            return $doctorId ? $query->where('doctor_id', $doctorId) : $query->whereRaw('1 = 0');
+        }
+
+        if ($user->isPatient()) {
+            return $query->where('user_id', $user->id);
+        }
+
+        return $query->whereRaw('1 = 0');
+    }
+
     public static function table(Table $table): Table
     {
         return BookAppointmentsTable::configure($table);
@@ -50,7 +78,7 @@ class BookAppointmentResource extends Resource
         return [
             'index' => ListBookAppointments::route('/'),
             'create' => CreateBookAppointment::route('/create'),
-            'edit' => EditBookAppointment::route('/{{record}}/edit'),
+            'edit' => EditBookAppointment::route('/{record}/edit'),
         ];
     }
 }

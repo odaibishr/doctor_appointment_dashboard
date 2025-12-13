@@ -7,6 +7,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class HospitalForm
 {
@@ -29,7 +30,7 @@ class HospitalForm
                     ->required(),
 
                 TextInput::make('website')
-                    ->label('الموقع الإلكتروني (اختياري)')
+                    ->label('الموقع الإلكتروني')
                     ->url(),
 
                 TextInput::make('address')
@@ -55,7 +56,10 @@ class HospitalForm
                             ->numeric()
                             ->required(),
                     ])
-                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة موقع')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionAction(fn ($action) => $action
+                        ->visible(fn () => Auth::user()?->isAdmin())
+                        ->modalHeading('إضافة موقع')
+                        ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $name = trim((string) ($data['name'] ?? ''));
                         $lat = (string) ($data['lat'] ?? '');
@@ -86,11 +90,11 @@ class HospitalForm
                     ->required(),
 
                 FileUpload::make('image')
-                    ->label('شعار أو صورة المستشفى')
+                    ->label('صورة المستشفى')
                     ->image()
                     ->disk('public')
                     ->directory('hospitals')
-                    ->columnSpan(2),
+                    ->columnSpan(span: 2),
             ]);
     }
 }

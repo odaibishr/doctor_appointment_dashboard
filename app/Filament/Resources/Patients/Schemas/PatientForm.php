@@ -8,6 +8,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class PatientForm
 {
@@ -15,20 +16,14 @@ class PatientForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->label('الاسم الكامل')
+                Select::make('user_id')
+                    ->label('حساب المستخدم')
+                    ->relationship('user', 'name')
                     ->required()
+                    ->default(fn () => Auth::id())
+                    ->disabled(fn () => ! Auth::user()?->isAdmin())
+                    ->hidden(fn () => ! Auth::user()?->isAdmin())
                     ->columnSpan(2),
-
-                TextInput::make('email')
-                    ->label('البريد الإلكتروني')
-                    ->email()
-                    ->required(),
-
-                TextInput::make('password')
-                    ->label('كلمة المرور')
-                    ->password()
-                    ->required(),
 
                 TextInput::make('phone')
                     ->label('رقم الهاتف')
@@ -45,7 +40,7 @@ class PatientForm
                     ->required()
                     ->columnSpan(1),
 
-                DatePicker::make('birth_day')
+                DatePicker::make('birth_date')
                     ->label('تاريخ الميلاد')
                     ->columnSpan(1),
 
@@ -68,7 +63,10 @@ class PatientForm
                             ->numeric()
                             ->required(),
                     ])
-                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة موقع')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionAction(fn ($action) => $action
+                        ->visible(fn () => Auth::user()?->isAdmin())
+                        ->modalHeading('إضافة موقع')
+                        ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $name = trim((string) ($data['name'] ?? ''));
                         $lat = (string) ($data['lat'] ?? '');
@@ -110,3 +108,4 @@ class PatientForm
             ]);
     }
 }
+

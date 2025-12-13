@@ -16,8 +16,13 @@ class EditDoctor extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->visible(fn (): bool => static::getResource()::canDelete($this->getRecord())),
         ];
     }
-}
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return $data;
+    }
+}

@@ -8,6 +8,8 @@ use App\Filament\Resources\FavoriteDoctors\Pages\ListFavoriteDoctors;
 use App\Filament\Resources\FavoriteDoctors\Schemas\FavoriteDoctorForm;
 use App\Filament\Resources\FavoriteDoctors\Tables\FavoriteDoctorsTable;
 use App\Models\FavoriteDoctor;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,26 @@ class FavoriteDoctorResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return FavoriteDoctorForm::configure($schema);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isPatient()) {
+            return $query->where('user_id', $user->id);
+        }
+
+        return $query->whereRaw('1 = 0');
     }
 
     public static function table(Table $table): Table

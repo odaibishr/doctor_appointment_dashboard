@@ -4,6 +4,7 @@ namespace App\Filament\Resources\FavoriteDoctors\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class FavoriteDoctorForm
 {
@@ -16,11 +17,15 @@ class FavoriteDoctorForm
                     ->relationship('doctor', 'name')
                     ->searchable()
                     ->required(),
+
                 Select::make('user_id')
                     ->label('المريض')
                     ->relationship('user', 'name')
-                    ->searchable()
-                    ->required(),
+                    ->required()
+                    ->default(fn () => Auth::id())
+                    ->disabled(fn () => ! Auth::user()?->isAdmin())
+                    ->hidden(fn () => ! Auth::user()?->isAdmin()),
             ]);
     }
 }
+

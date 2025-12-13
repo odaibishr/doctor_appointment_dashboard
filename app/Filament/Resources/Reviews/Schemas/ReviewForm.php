@@ -6,6 +6,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewForm
 {
@@ -27,6 +28,9 @@ class ReviewForm
                     ->searchable()
                     ->preload()
                     ->required()
+                    ->default(fn () => Auth::id())
+                    ->disabled(fn () => ! Auth::user()?->isAdmin())
+                    ->hidden(fn () => ! Auth::user()?->isAdmin())
                     ->columnSpan(2),
 
                 TextInput::make('rating')
@@ -44,3 +48,4 @@ class ReviewForm
             ]);
     }
 }
+

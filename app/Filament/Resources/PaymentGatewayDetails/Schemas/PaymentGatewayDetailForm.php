@@ -29,7 +29,7 @@ class PaymentGatewayDetailForm
                     ->columnSpan(2),
 
                 Toggle::make('is_active')
-                    ->label('مفعل')
+                    ->label('مفعّل')
                     ->columnSpan(1),
 
                 FileUpload::make('logo')
@@ -42,3 +42,4 @@ class PaymentGatewayDetailForm
             ]);
     }
 }
+

@@ -8,6 +8,8 @@ use App\Filament\Resources\DoctorSchedules\Pages\ListDoctorSchedules;
 use App\Filament\Resources\DoctorSchedules\Schemas\DoctorScheduleForm;
 use App\Filament\Resources\DoctorSchedules\Tables\DoctorSchedulesTable;
 use App\Models\DoctorSchedule;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,28 @@ class DoctorScheduleResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return DoctorScheduleForm::configure($schema);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isDoctor()) {
+            $doctorId = $user->doctor?->id;
+
+            return $doctorId ? $query->where('doctor_id', $doctorId) : $query->whereRaw('1 = 0');
+        }
+
+        return $query->whereRaw('1 = 0');
     }
 
     public static function table(Table $table): Table

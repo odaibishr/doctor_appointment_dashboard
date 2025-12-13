@@ -8,6 +8,8 @@ use App\Filament\Resources\Notifications\Pages\ListNotifications;
 use App\Filament\Resources\Notifications\Schemas\NotificationForm;
 use App\Filament\Resources\Notifications\Tables\NotificationsTable;
 use App\Models\Notification;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +33,26 @@ class NotificationResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return NotificationForm::configure($schema);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isDoctor() || $user->isPatient()) {
+            return $query->where('user_id', $user->id);
+        }
+
+        return $query->whereRaw('1 = 0');
     }
 
     public static function table(Table $table): Table

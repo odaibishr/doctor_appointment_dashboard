@@ -8,6 +8,7 @@ use App\Filament\Resources\Hospitals\Pages\ListHospitals;
 use App\Filament\Resources\Hospitals\Schemas\HospitalForm;
 use App\Filament\Resources\Hospitals\Tables\HospitalsTable;
 use App\Models\Hospital;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +32,11 @@ class HospitalResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return HospitalForm::configure($schema);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public static function table(Table $table): Table

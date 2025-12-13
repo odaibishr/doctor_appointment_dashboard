@@ -8,6 +8,7 @@ use App\Filament\Resources\Locations\Pages\ListLocations;
 use App\Filament\Resources\Locations\Schemas\LocationForm;
 use App\Filament\Resources\Locations\Tables\LocationsTable;
 use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +32,11 @@ class LocationResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return LocationForm::configure($schema);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public static function table(Table $table): Table

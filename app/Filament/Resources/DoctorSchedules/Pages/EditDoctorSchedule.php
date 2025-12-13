@@ -16,8 +16,8 @@ class EditDoctorSchedule extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->visible(fn (): bool => static::getResource()::canDelete($this->getRecord())),
         ];
     }
 }
-

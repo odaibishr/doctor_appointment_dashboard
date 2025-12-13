@@ -8,6 +8,7 @@ use App\Filament\Resources\Days\Pages\ListDays;
 use App\Filament\Resources\Days\Schemas\DayForm;
 use App\Filament\Resources\Days\Tables\DaysTable;
 use App\Models\Day;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +32,11 @@ class DayResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return DayForm::configure($schema);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public static function table(Table $table): Table

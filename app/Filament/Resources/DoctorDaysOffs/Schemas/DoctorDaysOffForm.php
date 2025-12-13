@@ -4,6 +4,7 @@ namespace App\Filament\Resources\DoctorDaysOffs\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorDaysOffForm
 {
@@ -13,15 +14,19 @@ class DoctorDaysOffForm
             ->components([
                 Select::make('doctor_id')
                     ->label('الطبيب')
-                    ->relationship('doctor', 'name') // يعرض أسماء الأطباء
+                    ->relationship('doctor', 'name')
                     ->required()
+                    ->default(fn () => Auth::user()?->doctor?->id)
+                    ->disabled(fn () => ! Auth::user()?->isAdmin())
+                    ->hidden(fn () => ! Auth::user()?->isAdmin())
                     ->columnSpan(2),
 
                 Select::make('day_id')
                     ->label('اليوم')
-                    ->relationship('day', 'day_name') // يعرض أسماء الأيام
+                    ->relationship('day', 'day_name')
                     ->required()
                     ->columnSpan(2),
             ]);
     }
 }
+

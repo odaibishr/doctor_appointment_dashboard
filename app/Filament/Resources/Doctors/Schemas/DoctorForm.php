@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Doctors\Schemas;
 
-use App\Models\Location;
 use App\Models\Hospital;
+use App\Models\Location;
 use App\Models\Specialty;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -12,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorForm
 {
@@ -20,19 +21,22 @@ class DoctorForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('الاسم الكامل')
+                    ->label('اسم الطبيب')
                     ->required()
                     ->columnSpan(2),
 
                 TextInput::make('email')
                     ->label('البريد الإلكتروني')
                     ->email()
-                    ->required(),
+                    ->required()
+                    ->columnSpan(2),
 
-                TextInput::make(name: 'password')
+                TextInput::make('password')
                     ->label('كلمة المرور')
                     ->password()
-                    ->required(),
+                    ->required()
+                    ->helperText('سيتم استخدام هذه كلمة المرور لإنشاء حساب دخول للطبيب تلقائياً.')
+                    ->columnSpan(2),
 
                 TextInput::make('phone')
                     ->label('رقم الهاتف')
@@ -70,10 +74,13 @@ class DoctorForm
                             ->directory('specialties')
                             ->columnSpan(2),
                         Toggle::make('is_active')
-                            ->label('مفعل')
+                            ->label('نشط')
                             ->default(true),
                     ])
-                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة تخصص')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionAction(fn ($action) => $action
+                        ->visible(fn () => Auth::user()?->isAdmin())
+                        ->modalHeading('إضافة تخصص')
+                        ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $name = trim((string) ($data['name'] ?? ''));
 
@@ -111,7 +118,10 @@ class DoctorForm
                             ->numeric()
                             ->required(),
                     ])
-                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة موقع')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionAction(fn ($action) => $action
+                        ->visible(fn () => Auth::user()?->isAdmin())
+                        ->modalHeading('إضافة موقع')
+                        ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $name = trim((string) ($data['name'] ?? ''));
                         $lat = (string) ($data['lat'] ?? '');
@@ -154,6 +164,7 @@ class DoctorForm
                             ->maxLength(255),
                         TextInput::make('phone')
                             ->label('رقم الهاتف')
+                            ->tel()
                             ->required()
                             ->maxLength(50),
                         TextInput::make('email')
@@ -162,76 +173,33 @@ class DoctorForm
                             ->required()
                             ->maxLength(255),
                         TextInput::make('website')
-                            ->label('الموقع الإلكتروني (اختياري)')
+                            ->label('الموقع الإلكتروني')
                             ->url()
                             ->maxLength(255),
                         TextInput::make('address')
                             ->label('العنوان')
-                            ->required()
                             ->maxLength(255),
                         Select::make('location_id')
                             ->label('الموقع')
                             ->relationship('location', 'name')
                             ->searchable()
                             ->preload()
-                            ->createOptionForm([
-                                TextInput::make('name')
-                                    ->label('اسم الموقع')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('lat')
-                                    ->label('خط العرض')
-                                    ->numeric()
-                                    ->required(),
-                                TextInput::make('lng')
-                                    ->label('خط الطول')
-                                    ->numeric()
-                                    ->required(),
-                            ])
-                            ->createOptionAction(fn ($action) => $action->modalHeading('إضافة موقع')->modalSubmitActionLabel('حفظ'))
-                            ->createOptionUsing(function (array $data): int {
-                                $name = trim((string) ($data['name'] ?? ''));
-                                $lat = (string) ($data['lat'] ?? '');
-                                $lng = (string) ($data['lng'] ?? '');
-
-                                $existing = Location::query()
-                                    ->when($name !== '', fn ($q) => $q->where('name', $name))
-                                    ->when($lat !== '', fn ($q) => $q->where('lat', $lat))
-                                    ->when($lng !== '', fn ($q) => $q->where('lng', $lng))
-                                    ->first();
-
-                                if ($existing) {
-                                    $existing->fill([
-                                        'name' => $name,
-                                        'lat' => $lat,
-                                        'lng' => $lng,
-                                    ])->save();
-
-                                    return (int) $existing->getKey();
-                                }
-
-                                return (int) Location::query()->create([
-                                    'name' => $name,
-                                    'lat' => $lat,
-                                    'lng' => $lng,
-                                ])->getKey();
-                            })
                             ->required(),
                         FileUpload::make('image')
-                            ->label('شعار أو صورة المستشفى')
+                            ->label('صورة المستشفى')
                             ->image()
                             ->disk('public')
                             ->directory('hospitals'),
                     ])
-                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة مستشفى')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionAction(fn ($action) => $action
+                        ->visible(fn () => Auth::user()?->isAdmin())
+                        ->modalHeading('إضافة مستشفى')
+                        ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
-                        $name = trim((string) ($data['name'] ?? ''));
-                        $phone = trim((string) ($data['phone'] ?? ''));
                         $email = trim((string) ($data['email'] ?? ''));
 
                         $existing = Hospital::query()
                             ->when($email !== '', fn ($q) => $q->where('email', $email))
-                            ->when($email === '' && $name !== '' && $phone !== '', fn ($q) => $q->where('name', $name)->where('phone', $phone))
                             ->first();
 
                         if ($existing) {
@@ -257,20 +225,16 @@ class DoctorForm
                     ->columnSpan(1),
 
                 Toggle::make('is_top_doctor')
-                    ->label('افضل الاطباء')
+                    ->label('طبيب بارز')
                     ->columnSpan(1),
 
                 FileUpload::make('profile_image')
                     ->label('الصورة الشخصية')
                     ->image()
-                    // ->imagePreviewHeight(200)
-                    // ->imageCropAspectRatio('1:1')
-                    // ->imageResizeTargetHeight(200)
-                    // ->imageResizeTargetWidth(200)
                     ->disk('public')
                     ->directory('doctors')
                     ->columnSpan(2),
-
             ]);
     }
 }
+

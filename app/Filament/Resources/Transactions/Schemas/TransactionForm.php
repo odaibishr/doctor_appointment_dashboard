@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionForm
 {
@@ -41,7 +42,7 @@ class TransactionForm
                             ->required()
                             ->maxLength(255),
                         Toggle::make('is_active')
-                            ->label('مفعل')
+                            ->label('مفعّل')
                             ->default(true),
                         FileUpload::make('logo')
                             ->label('الشعار')
@@ -49,7 +50,10 @@ class TransactionForm
                             ->disk('public')
                             ->directory('payment-gateways'),
                     ])
-                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة بوابة دفع')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionAction(fn ($action) => $action
+                        ->visible(fn () => Auth::user()?->isAdmin())
+                        ->modalHeading('إضافة بوابة دفع')
+                        ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $gatewayName = trim((string) ($data['gateway_name'] ?? ''));
 

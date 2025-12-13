@@ -154,15 +154,19 @@ class DoctorController extends Controller
 
     public function getDoctorById($id)
     {
-        $doctor = Doctor::findOrFail($id);
-        if (!$doctor) {
-            return response()->json([
-                'message' => 'Doctor not found'
-            ], 404);
-        }
+        $userId = auth()->id();
+
+        $doctor = Doctor::query()
+            ->with(['location', 'specialty', 'hospital', 'schedules.day', 'daysOff.day'])
+            ->withCount([
+                'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                },
+            ])
+            ->findOrFail($id);
 
         return response()->json([
-            'data' => $doctor->with(['location', 'specialty', 'hospital'])
+            'data' => $doctor,
         ], 200);
     }
 

@@ -8,6 +8,7 @@ use App\Filament\Resources\Specialties\Pages\ListSpecialties;
 use App\Filament\Resources\Specialties\Schemas\SpecialtyForm;
 use App\Filament\Resources\Specialties\Tables\SpecialtiesTable;
 use App\Models\Specialty;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -31,6 +32,11 @@ class SpecialtyResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return SpecialtyForm::configure($schema);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public static function table(Table $table): Table

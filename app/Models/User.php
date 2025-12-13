@@ -3,15 +3,23 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_DOCTOR = 'doctor';
+    public const ROLE_PATIENT = 'patient';
+    public const ROLE_LEGACY_USER = 'user';
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +54,45 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return in_array($this->roleNormalized(), [
+            self::ROLE_ADMIN,
+            self::ROLE_DOCTOR,
+            self::ROLE_PATIENT,
+        ], true);
+    }
+
+    public function roleNormalized(): string
+    {
+        return $this->role === self::ROLE_LEGACY_USER ? self::ROLE_PATIENT : (string) $this->role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->roleNormalized() === self::ROLE_ADMIN;
+    }
+
+    public function isDoctor(): bool
+    {
+        return $this->roleNormalized() === self::ROLE_DOCTOR;
+    }
+
+    public function isPatient(): bool
+    {
+        return $this->roleNormalized() === self::ROLE_PATIENT;
+    }
+
+    public function doctor(): HasOne
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    public function patient(): HasOne
+    {
+        return $this->hasOne(Patient::class);
     }
     public function appointments()
     {

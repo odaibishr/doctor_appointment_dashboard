@@ -4,12 +4,54 @@ namespace App\Filament\Resources\Doctors\Pages;
 
 use App\Filament\Resources\Concerns\RedirectsToIndex;
 use App\Filament\Resources\Doctors\DoctorResource;
+use App\Models\User;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class CreateDoctor extends CreateRecord
 {
     use RedirectsToIndex;
 
     protected static string $resource = DoctorResource::class;
-}
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $currentUser = auth()->user();
+        if (! $currentUser?->isAdmin()) {
+            return $data;
+        }
+
+        $email = (string) ($data['email'] ?? '');
+        $password = (string) ($data['password'] ?? '');
+
+        if ($password === '') {
+            throw ValidationException::withMessages([
+                'password' => 'كلمة المرور مطلوبة.',
+            ]);
+        }
+
+        if ($email === '') {
+            throw ValidationException::withMessages([
+                'email' => 'البريد الإلكتروني مطلوب لإنشاء حساب الطبيب.',
+            ]);
+        }
+
+        if (User::query()->where('email', $email)->exists()) {
+            throw ValidationException::withMessages([
+                'email' => 'البريد الإلكتروني مستخدم مسبقاً في حساب آخر.',
+            ]);
+        }
+
+        $user = User::query()->create([
+            'name' => (string) ($data['name'] ?? 'Doctor'),
+            'email' => $email,
+            'password' => Hash::make($password),
+            'role' => User::ROLE_DOCTOR,
+        ]);
+
+        $data['user_id'] = $user->id;
+
+        return $data;
+    }
+}

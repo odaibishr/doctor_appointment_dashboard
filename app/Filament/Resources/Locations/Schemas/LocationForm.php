@@ -15,12 +15,15 @@ class LocationForm
                     ->label('خط العرض')
                     ->required()
                     ->numeric(),
+
                 TextInput::make('lng')
                     ->label('خط الطول')
                     ->required()
                     ->numeric(),
+
                 TextInput::make('name')
                     ->label('اسم الموقع'),
             ]);
     }
 }
+

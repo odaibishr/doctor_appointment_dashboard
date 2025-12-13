@@ -24,7 +24,7 @@ class NotificationForm
                     ->columnSpanFull(),
 
                 Select::make('user_id')
-                    ->label('المريض')
+                    ->label('المستخدم')
                     ->relationship('user', 'name')
                     ->searchable()
                     ->preload()
@@ -33,3 +33,4 @@ class NotificationForm
             ]);
     }
 }
+
