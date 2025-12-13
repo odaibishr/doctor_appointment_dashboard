@@ -36,12 +36,6 @@ class HospitalForm
                     ->label('العنوان')
                     ->required(),
 
-                FileUpload::make('image')
-                    ->label('شعار أو صورة المستشفى')
-                    ->image()
-                    ->disk('public')
-                    ->directory('hospitals'),
-
                 Select::make('location_id')
                     ->label('الموقع')
                     ->relationship('location', 'name')
@@ -90,6 +84,13 @@ class HospitalForm
                         ])->getKey();
                     })
                     ->required(),
+
+                FileUpload::make('image')
+                    ->label('شعار أو صورة المستشفى')
+                    ->image()
+                    ->disk('public')
+                    ->directory('hospitals')
+                    ->columnSpan(2),
             ]);
     }
 }
