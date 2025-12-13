@@ -14,19 +14,19 @@ class SpecialtyForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Name')
+                    ->label('اسم التخصص')
                     ->required()
                     ->columnSpan(2),
 
                 FileUpload::make('icon')
-                    ->label('Icon')
+                    ->label('الأيقونة')
                     ->image()
                     ->disk('public')
                     ->directory('specialties')
                     ->columnSpan(2),
 
                 Toggle::make('is_active')
-                    ->label('Active')
+                    ->label('مفعل')
                     ->columnSpan(1),
             ]);
     }

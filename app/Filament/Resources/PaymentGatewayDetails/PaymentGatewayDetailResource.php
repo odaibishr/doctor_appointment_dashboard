@@ -18,9 +18,15 @@ class PaymentGatewayDetailResource extends Resource
 {
     protected static ?string $model = PaymentGatewayDetail::class;
 
+    protected static ?string $modelLabel = 'بوابة دفع';
+
+    protected static ?string $pluralModelLabel = 'بوابات الدفع';
+
+    protected static ?string $navigationLabel = 'بوابات الدفع';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'PaymentGatewayDetail';
+    protected static ?string $recordTitleAttribute = 'gateway_name';
 
     public static function form(Schema $schema): Schema
     {

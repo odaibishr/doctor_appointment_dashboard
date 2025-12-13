@@ -18,9 +18,15 @@ class PatientResource extends Resource
 {
     protected static ?string $model = Patient::class;
 
+    protected static ?string $modelLabel = 'مريض';
+
+    protected static ?string $pluralModelLabel = 'المرضى';
+
+    protected static ?string $navigationLabel = 'المرضى';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Patient';
+    protected static ?string $recordTitleAttribute = 'phone';
 
     public static function form(Schema $schema): Schema
     {

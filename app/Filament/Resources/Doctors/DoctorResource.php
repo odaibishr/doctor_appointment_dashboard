@@ -18,9 +18,15 @@ class DoctorResource extends Resource
 {
     protected static ?string $model = Doctor::class;
 
+    protected static ?string $modelLabel = 'طبيب';
+
+    protected static ?string $pluralModelLabel = 'الأطباء';
+
+    protected static ?string $navigationLabel = 'الأطباء';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Doctor';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {

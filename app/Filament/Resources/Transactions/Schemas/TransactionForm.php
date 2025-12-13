@@ -14,12 +14,13 @@ class TransactionForm
             ->columns(2)
             ->components([
                 TextInput::make('amount')
+                    ->label('المبلغ')
                     ->required()
                     ->numeric()
                     ->default(0),
 
                 Select::make('payment_gateway_detail_id')
-                    ->label('Payment Gateway')
+                    ->label('بوابة الدفع')
                     ->relationship('paymentGatewayDetail', 'gateway_name')
                     ->searchable()
                     ->required(),

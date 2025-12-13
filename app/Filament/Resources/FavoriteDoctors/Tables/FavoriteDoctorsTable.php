@@ -14,17 +14,21 @@ class FavoriteDoctorsTable
     {
         return $table
             ->columns([
-                TextColumn::make('doctor_id')
-                    ->numeric()
+                TextColumn::make('doctor.name')
+                    ->label('الطبيب')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('patient_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->label('المريض')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

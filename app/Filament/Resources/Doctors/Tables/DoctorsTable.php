@@ -19,70 +19,70 @@ class DoctorsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Doctor Name')
+                    ->label('اسم الطبيب')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('email')
-                    ->label('Email Address')
+                    ->label('البريد الإلكتروني')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('phone')
-                    ->label('Phone')
+                    ->label('رقم الهاتف')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('aboutus')
-                    ->label('About Us')
+                    ->label('نبذة عن الطبيب')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('location.name')
-                    ->label('Location')
+                    ->label('الموقع')
                     ->sortable(),
 
                 TextColumn::make('specialty.name')
-                    ->label('Specialty')
+                    ->label('التخصص')
                     ->sortable(),
 
                 TextColumn::make('hospital.name')
-                    ->label('Hospital')
+                    ->label('المستشفى')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('gender')
-                    ->label('Gender')
+                    ->label('الجنس')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 IconColumn::make('is_featured')
-                    ->label('Featured')
+                    ->label('مميز')
                     ->boolean(),
 
                 IconColumn::make('is_top_doctor')
-                    ->label('Top Doctor')
+                    ->label('طبيب مميز')
                     ->boolean()
                     ->toggleable(),
 
                 ImageColumn::make('profile_image')
-                    ->label('Profile')
+                    ->label('الصورة')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('birth_day')
-                    ->label('Birthday')
+                    ->label('تاريخ الميلاد')
                     ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -90,24 +90,24 @@ class DoctorsTable
             ->filters([
                 SelectFilter::make('gender')
                     ->options([
-                        'male' => 'Male',
-                        'female' => 'Female',
+                        'male' => 'ذكر',
+                        'female' => 'أنثى',
                     ])
-                    ->label('Gender'),
+                    ->label('الجنس'),
 
                 SelectFilter::make('specialty_id')
                     ->relationship('specialty', 'name')
-                    ->label('Specialty'),
+                    ->label('التخصص'),
 
                 SelectFilter::make('hospital_id')
                     ->relationship('hospital', 'name')
-                    ->label('Hospital'),
+                    ->label('المستشفى'),
 
                 TernaryFilter::make('is_featured')
-                    ->label('Featured'),
+                    ->label('مميز'),
 
                 TernaryFilter::make('is_top_doctor')
-                    ->label('Top Doctor'),
+                    ->label('طبيب مميز'),
             ])
             ->recordActions([
                 EditAction::make(),

@@ -18,9 +18,15 @@ class FavoriteDoctorResource extends Resource
 {
     protected static ?string $model = FavoriteDoctor::class;
 
+    protected static ?string $modelLabel = 'طبيب مفضل';
+
+    protected static ?string $pluralModelLabel = 'الأطباء المفضلون';
+
+    protected static ?string $navigationLabel = 'الأطباء المفضلون';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'FavoriteDoctor';
+    protected static ?string $recordTitleAttribute = 'id';
 
     public static function form(Schema $schema): Schema
     {

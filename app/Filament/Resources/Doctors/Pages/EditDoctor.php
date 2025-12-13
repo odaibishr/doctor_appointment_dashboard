@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Doctors\Pages;
 
+use App\Filament\Resources\Concerns\RedirectsToIndex;
 use App\Filament\Resources\Doctors\DoctorResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDoctor extends EditRecord
 {
+    use RedirectsToIndex;
+
     protected static string $resource = DoctorResource::class;
 
     protected function getHeaderActions(): array
@@ -17,3 +20,4 @@ class EditDoctor extends EditRecord
         ];
     }
 }
+

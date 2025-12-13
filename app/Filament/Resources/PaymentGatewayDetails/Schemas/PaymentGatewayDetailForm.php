@@ -14,26 +14,26 @@ class PaymentGatewayDetailForm
         return $schema
             ->components([
                 TextInput::make('gateway_name')
-                    ->label('Gateway Name')
+                    ->label('اسم بوابة الدفع')
                     ->required()
                     ->columnSpan(2),
 
                 TextInput::make('api_key')
-                    ->label('API Key')
+                    ->label('مفتاح API')
                     ->required()
                     ->columnSpan(2),
 
                 TextInput::make('api_secret')
-                    ->label('API Secret')
+                    ->label('سر API')
                     ->required()
                     ->columnSpan(2),
 
                 Toggle::make('is_active')
-                    ->label('Active')
+                    ->label('مفعل')
                     ->columnSpan(1),
 
                 FileUpload::make('logo')
-                    ->label('Logo')
+                    ->label('الشعار')
                     ->image()
                     ->imagePreviewHeight(100)
                     ->imageResizeTargetHeight(100)

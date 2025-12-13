@@ -14,41 +14,41 @@ class HospitalForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Hospital Name')
+                    ->label('اسم المستشفى')
                     ->required(),
 
                 TextInput::make('phone')
-                    ->label('Phone Number')
+                    ->label('رقم الهاتف')
                     ->tel()
                     ->required(),
 
                 TextInput::make('email')
-                    ->label('Email')
+                    ->label('البريد الإلكتروني')
                     ->email()
                     ->required(),
 
                 TextInput::make('website')
-                    ->label('Website (optional)')
+                    ->label('الموقع الإلكتروني (اختياري)')
                     ->url(),
 
                 TextInput::make('address')
-                    ->label('Address')
+                    ->label('العنوان')
                     ->required(),
 
                 FileUpload::make('image')
-                    ->label('Hospital Logo / Image')
+                    ->label('شعار أو صورة المستشفى')
                     ->image()
                     ->disk('public')
                     ->directory('hospitals'),
 
                 Select::make('location_id')
-                    ->label('Location')
+                    ->label('الموقع')
                     ->relationship('location', 'name')
                     ->searchable()
                     ->required(),
 
                 Select::make('doctors')
-                    ->label('Doctors in Hospital')
+                    ->label('الأطباء في المستشفى')
                     ->multiple()
                     ->relationship('doctors', 'name')
                     ->searchable()

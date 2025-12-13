@@ -16,47 +16,51 @@ class HospitalsTable
         return $table
             ->columns([
                 ImageColumn::make('image')
-                    ->label('Logo')
+                    ->label('الشعار')
                     ->square()
                     ->size(50),
 
                 TextColumn::make('name')
+                    ->label('اسم المستشفى')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('phone')
+                    ->label('رقم الهاتف')
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('email')
-                    ->label('Email')
+                    ->label('البريد الإلكتروني')
                     ->searchable(),
 
                 TextColumn::make('website')
+                    ->label('الموقع الإلكتروني')
                     ->sortable(),
 
                 TextColumn::make('address')
+                    ->label('العنوان')
                     ->searchable()
                     ->limit(25),
 
-                // عرض اسم المنطقة بدلاً من الرقم
                 TextColumn::make('location.name')
-                    ->label('Location')
+                    ->label('الموقع')
                     ->sortable()
                     ->searchable(),
 
-                // عرض عدد الأطباء بدلاً من doctor_id
                 TextColumn::make('doctors_count')
                     ->counts('doctors')
-                    ->label('Doctors')
+                    ->label('عدد الأطباء')
                     ->sortable(),
 
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

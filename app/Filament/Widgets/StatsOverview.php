@@ -14,23 +14,23 @@ class StatsOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Patients Count', Patient::count())
-                ->description('Total Patients')
+            Stat::make('عدد المرضى', Patient::count())
+                ->description('إجمالي المرضى')
                 ->descriptionIcon('heroicon-m-user')
                 ->color('success'),
 
-            Stat::make('Doctors Count', Doctor::count())
-                ->description('Total Doctors')
+            Stat::make('عدد الأطباء', Doctor::count())
+                ->description('إجمالي الأطباء')
                 ->descriptionIcon('heroicon-m-user-circle')
                 ->color('primary'),
 
-            Stat::make('Appointments Count', BookAppointment::count())
-                ->description('Total Appointments')
+            Stat::make('عدد المواعيد', BookAppointment::count())
+                ->description('إجمالي المواعيد')
                 ->descriptionIcon('heroicon-m-calendar')
                 ->color('warning'),
 
-            Stat::make('Total Revenue', number_format(Transaction::sum('amount'), 2))
-                ->description('Total Payments')
+            Stat::make('إجمالي الإيرادات', number_format(Transaction::sum('amount'), 2))
+                ->description('إجمالي المدفوعات')
                 ->descriptionIcon('heroicon-m-banknotes')
                 ->color('info'),
         ];

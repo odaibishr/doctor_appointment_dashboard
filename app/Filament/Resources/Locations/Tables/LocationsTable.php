@@ -15,18 +15,23 @@ class LocationsTable
         return $table
             ->columns([
                 TextColumn::make('lat')
+                    ->label('خط العرض')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('lng')
+                    ->label('خط الطول')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('name')
+                    ->label('اسم الموقع')
                     ->searchable(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

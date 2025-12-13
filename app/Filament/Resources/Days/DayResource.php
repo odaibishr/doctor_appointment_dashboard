@@ -18,9 +18,15 @@ class DayResource extends Resource
 {
     protected static ?string $model = Day::class;
 
+    protected static ?string $modelLabel = 'يوم';
+
+    protected static ?string $pluralModelLabel = 'الأيام';
+
+    protected static ?string $navigationLabel = 'الأيام';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Day';
+    protected static ?string $recordTitleAttribute = 'day_name';
 
     public static function form(Schema $schema): Schema
     {

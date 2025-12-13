@@ -18,9 +18,15 @@ class BookAppointmentResource extends Resource
 {
     protected static ?string $model = BookAppointment::class;
 
+    protected static ?string $modelLabel = 'حجز موعد';
+
+    protected static ?string $pluralModelLabel = 'حجوزات المواعيد';
+
+    protected static ?string $navigationLabel = 'حجوزات المواعيد';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'BookAppointment';
+    protected static ?string $recordTitleAttribute = 'date';
 
     public static function form(Schema $schema): Schema
     {
@@ -44,7 +50,7 @@ class BookAppointmentResource extends Resource
         return [
             'index' => ListBookAppointments::route('/'),
             'create' => CreateBookAppointment::route('/create'),
-            'edit' => EditBookAppointment::route('/{record}/edit'),
+            'edit' => EditBookAppointment::route('/{{record}}/edit'),
         ];
     }
 }

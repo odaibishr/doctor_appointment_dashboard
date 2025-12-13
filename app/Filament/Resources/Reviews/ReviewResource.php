@@ -18,9 +18,15 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
+    protected static ?string $modelLabel = 'مراجعة';
+
+    protected static ?string $pluralModelLabel = 'المراجعات';
+
+    protected static ?string $navigationLabel = 'المراجعات';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Review';
+    protected static ?string $recordTitleAttribute = 'comment';
 
     public static function form(Schema $schema): Schema
     {

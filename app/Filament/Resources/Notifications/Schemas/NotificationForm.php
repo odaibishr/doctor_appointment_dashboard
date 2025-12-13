@@ -14,17 +14,17 @@ class NotificationForm
         return $schema
             ->components([
                 TextInput::make('title')
-                    ->label('Title')
+                    ->label('العنوان')
                     ->required()
                     ->columnSpan(2),
 
                 Textarea::make('message')
-                    ->label('Message')
+                    ->label('الرسالة')
                     ->required()
                     ->columnSpanFull(),
 
                 Select::make('patient_id')
-                    ->label('Patient')
+                    ->label('المريض')
                     ->relationship('patient', 'name')
                     ->required()
                     ->columnSpan(2),

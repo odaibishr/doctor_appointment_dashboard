@@ -16,16 +16,21 @@ class SpecialtiesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('اسم التخصص')
                     ->searchable(),
                 TextColumn::make('icon')
+                    ->label('الأيقونة')
                     ->searchable(),
                 IconColumn::make('is_active')
+                    ->label('مفعل')
                     ->boolean(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

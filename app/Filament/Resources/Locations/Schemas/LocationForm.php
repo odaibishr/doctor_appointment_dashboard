@@ -12,12 +12,15 @@ class LocationForm
         return $schema
             ->components([
                 TextInput::make('lat')
+                    ->label('خط العرض')
                     ->required()
                     ->numeric(),
                 TextInput::make('lng')
+                    ->label('خط الطول')
                     ->required()
                     ->numeric(),
-                TextInput::make('name'),
+                TextInput::make('name')
+                    ->label('اسم الموقع'),
             ]);
     }
 }

@@ -15,12 +15,12 @@ class DoctorDaysOffsTable
         return $table
             ->columns([
                 TextColumn::make('doctor.name')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('day.name')
-                    ->label('Day')
+                TextColumn::make('day.day_name')
+                    ->label('اليوم')
                     ->searchable()
                     ->sortable(),
             ])

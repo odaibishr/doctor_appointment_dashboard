@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\FavoriteDoctors\Schemas;
 
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 
 class FavoriteDoctorForm
@@ -11,12 +11,16 @@ class FavoriteDoctorForm
     {
         return $schema
             ->components([
-                TextInput::make('doctor_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('patient_id')
-                    ->required()
-                    ->numeric(),
+                Select::make('doctor_id')
+                    ->label('الطبيب')
+                    ->relationship('doctor', 'name')
+                    ->searchable()
+                    ->required(),
+                Select::make('user_id')
+                    ->label('المريض')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->required(),
             ]);
     }
 }

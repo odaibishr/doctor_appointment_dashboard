@@ -12,14 +12,14 @@ class DoctorDaysOffForm
         return $schema
             ->components([
                 Select::make('doctor_id')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->relationship('doctor', 'name') // يعرض أسماء الأطباء
                     ->required()
                     ->columnSpan(2),
 
                 Select::make('day_id')
-                    ->label('Day')
-                    ->relationship('day', 'name') // يعرض أسماء الأيام
+                    ->label('اليوم')
+                    ->relationship('day', 'day_name') // يعرض أسماء الأيام
                     ->required()
                     ->columnSpan(2),
             ]);

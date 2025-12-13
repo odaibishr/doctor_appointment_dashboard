@@ -15,49 +15,49 @@ class BookAppointmentForm
         return $schema
             ->components([
                 Select::make('doctor_id')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->relationship('doctor', 'name')
                     ->required()
                     ->columnSpan(2),
 
-                Select::make('patient_id')
-                    ->label('Patient')
-                    ->relationship('patient', 'name')
+                Select::make('user_id')
+                    ->label('المريض')
+                    ->relationship('user', 'name')
                     ->required()
                     ->columnSpan(2),
 
                 Select::make('doctor_schedule_id')
-                    ->label('Schedule')
-                    ->relationship('schedule', 'id') // لاحقًا يمكن عرض اليوم والوقت
+                    ->label('جدول الطبيب')
+                    ->relationship('schedule', 'id')
                     ->required()
                     ->columnSpan(2),
 
                 DatePicker::make('date')
-                    ->label('Appointment Date')
+                    ->label('تاريخ الموعد')
                     ->required()
                     ->columnSpan(2),
 
                 Select::make('status')
-                    ->label('Status')
+                    ->label('الحالة')
                     ->options([
-                        'pending' => 'Pending',
-                        'confirmed' => 'Confirmed',
-                        'canceled' => 'Canceled',
+                        'pending' => 'قيد الانتظار',
+                        'confirmed' => 'مؤكد',
+                        'cancelled' => 'ملغى',
                     ])
                     ->default('pending')
                     ->required()
                     ->columnSpan(1),
 
                 Toggle::make('is_completed')
-                    ->label('Completed')
+                    ->label('مكتمل')
                     ->columnSpan(1),
 
                 TextInput::make('payment_mode')
-                    ->label('Payment Mode')
+                    ->label('طريقة الدفع')
                     ->columnSpan(1),
 
                 Select::make('transaction_id')
-                    ->label('Transaction')
+                    ->label('المعاملة')
                     ->relationship('transaction', 'id')
                     ->columnSpan(1),
             ]);

@@ -15,24 +15,27 @@ class TransactionsTable
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('Transaction ID')
+                    ->label('رقم المعاملة')
                     ->sortable(),
 
                 TextColumn::make('amount')
+                    ->label('المبلغ')
                     ->numeric()
                     ->sortable(),
 
                 TextColumn::make('paymentGatewayDetail.gateway_name')
-                    ->label('Payment Gateway')
+                    ->label('بوابة الدفع')
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

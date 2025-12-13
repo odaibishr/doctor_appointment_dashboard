@@ -14,19 +14,19 @@ class ReviewForm
         return $schema
             ->components([
                 Select::make('doctor_id')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->relationship('doctor', 'name')
                     ->required()
                     ->columnSpan(2),
 
                 Select::make('patient_id')
-                    ->label('Patient')
+                    ->label('المريض')
                     ->relationship('patient', 'name')
                     ->required()
                     ->columnSpan(2),
 
                 TextInput::make('rating')
-                    ->label('Rating')
+                    ->label('التقييم')
                     ->numeric()
                     ->required()
                     ->minValue(0)
@@ -35,7 +35,7 @@ class ReviewForm
                     ->columnSpan(1),
 
                 Textarea::make('description')
-                    ->label('Comment')
+                    ->label('التعليق')
                     ->columnSpanFull(),
             ]);
     }

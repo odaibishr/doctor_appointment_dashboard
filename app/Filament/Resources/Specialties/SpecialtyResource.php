@@ -18,9 +18,15 @@ class SpecialtyResource extends Resource
 {
     protected static ?string $model = Specialty::class;
 
+    protected static ?string $modelLabel = 'تخصص';
+
+    protected static ?string $pluralModelLabel = 'التخصصات';
+
+    protected static ?string $navigationLabel = 'التخصصات';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Specialty';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {

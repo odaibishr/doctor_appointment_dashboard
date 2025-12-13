@@ -15,47 +15,47 @@ class PatientForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Full Name')
+                    ->label('الاسم الكامل')
                     ->required()
                     ->columnSpan(2),
 
                 TextInput::make('email')
-                    ->label('Email Address')
+                    ->label('البريد الإلكتروني')
                     ->email()
                     ->required(),
 
                 TextInput::make('password')
-                    ->label('Password')
+                    ->label('كلمة المرور')
                     ->password()
                     ->required(),
 
                 TextInput::make('phone')
-                    ->label('Phone')
+                    ->label('رقم الهاتف')
                     ->tel()
                     ->required()
                     ->columnSpan(1),
 
                 Select::make('gender')
-                    ->label('Gender')
+                    ->label('الجنس')
                     ->options([
-                        'male' => 'Male',
-                        'female' => 'Female',
+                        'male' => 'ذكر',
+                        'female' => 'أنثى',
                     ])
                     ->required()
                     ->columnSpan(1),
 
                 DatePicker::make('birth_day')
-                    ->label('Birthday')
+                    ->label('تاريخ الميلاد')
                     ->columnSpan(1),
 
                 Select::make('location_id')
-                    ->label('Location')
+                    ->label('الموقع')
                     ->relationship('location', 'name')
                     ->required()
                     ->columnSpan(1),
 
                 FileUpload::make('profile_image')
-                    ->label('Profile Image')
+                    ->label('الصورة الشخصية')
                     ->image()
                     ->imagePreviewHeight(200)
                     ->imageCropAspectRatio('1:1')

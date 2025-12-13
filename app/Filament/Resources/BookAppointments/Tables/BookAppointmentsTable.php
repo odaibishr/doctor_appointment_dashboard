@@ -19,50 +19,50 @@ class BookAppointmentsTable
         return $table
             ->columns([
                 TextColumn::make('doctor.name')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('patient.name')
-                    ->label('Patient')
+                TextColumn::make('user.name')
+                    ->label('المريض')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('doctor_schedule.day.name')
-                    ->label('Day')
+                TextColumn::make('schedule.day.name')
+                    ->label('اليوم')
                     ->sortable(),
 
                 TextColumn::make('date')
-                    ->label('Date')
+                    ->label('تاريخ الموعد')
                     ->date()
                     ->sortable(),
 
                 TextColumn::make('status')
-                    ->label('Status')
+                    ->label('الحالة')
                     ->searchable()
                     ->sortable(),
 
                 IconColumn::make('is_completed')
-                    ->label('Completed')
+                    ->label('مكتمل')
                     ->boolean(),
 
                 TextColumn::make('payment_mode')
-                    ->label('Payment Mode')
+                    ->label('طريقة الدفع')
                     ->searchable(),
 
                 TextColumn::make('transaction_id')
-                    ->label('Transaction ID')
+                    ->label('رقم المعاملة')
                     ->numeric()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -70,25 +70,25 @@ class BookAppointmentsTable
             ->filters([
                 SelectFilter::make('doctor_id')
                     ->relationship('doctor', 'name')
-                    ->label('Doctor'),
+                    ->label('الطبيب'),
 
-                SelectFilter::make('patient_id')
-                    ->relationship('patient', 'name')
-                    ->label('Patient'),
+                SelectFilter::make('user_id')
+                    ->relationship('user', 'name')
+                    ->label('المريض'),
 
                 SelectFilter::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'confirmed' => 'Confirmed',
-                        'canceled' => 'Canceled',
+                        'pending' => 'قيد الانتظار',
+                        'confirmed' => 'مؤكد',
+                        'cancelled' => 'ملغى',
                     ])
-                    ->label('Status'),
+                    ->label('الحالة'),
 
                 Filter::make('date')
-                    ->label('Appointment Date')
+                    ->label('تاريخ الموعد')
                     ->form([
-                        \Filament\Forms\Components\DatePicker::make('from')->label('From'),
-                        \Filament\Forms\Components\DatePicker::make('until')->label('Until'),
+                        \Filament\Forms\Components\DatePicker::make('from')->label('من'),
+                        \Filament\Forms\Components\DatePicker::make('until')->label('إلى'),
                     ])
                     ->query(function (Builder $query, array $data) {
                         return $query

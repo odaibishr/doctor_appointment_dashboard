@@ -15,37 +15,37 @@ class ReviewsTable
         return $table
             ->columns([
                 TextColumn::make('doctor.name')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->searchable()
                     ->sortable()
                     ->columnSpan(2),
 
                 TextColumn::make('patient.name')
-                    ->label('Patient')
+                    ->label('المريض')
                     ->searchable()
                     ->sortable()
                     ->columnSpan(2),
 
                 TextColumn::make('rating')
-                    ->label('Rating')
+                    ->label('التقييم')
                     ->numeric()
                     ->sortable()
                     ->columnSpan(1),
 
                 TextColumn::make('description')
-                    ->label('Comment')
+                    ->label('التعليق')
                     ->limit(50)
                     ->searchable()
                     ->columnSpanFull(),
 
                 TextColumn::make('created_at')
-                    ->label('Created At')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated At')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

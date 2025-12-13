@@ -13,24 +13,24 @@ class DoctorScheduleForm
         return $schema
             ->components([
                 Select::make('doctor_id')
-                    ->label('Doctor')
+                    ->label('الطبيب')
                     ->relationship('doctor', 'name') 
                     ->required()
                     ->columnSpan(2),
 
                 Select::make('day_id')
-                    ->label('Day')
+                    ->label('اليوم')
                     ->relationship('day', 'day_name') 
                     ->required()
                     ->columnSpan(2),
 
                 TimePicker::make('start_time')
-                    ->label('Start Time')
+                    ->label('بداية العمل')
                     ->required()
                     ->columnSpan(1),
 
                 TimePicker::make('end_time')
-                    ->label('End Time')
+                    ->label('نهاية العمل')
                     ->required()
                     ->columnSpan(1),
             ]);

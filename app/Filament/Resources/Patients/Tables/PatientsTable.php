@@ -18,46 +18,48 @@ class PatientsTable
             ->columns([
 
                 TextColumn::make('user.name')
-                    ->label('Full Name')
+                    ->label('الاسم الكامل')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('user.email')
-                    ->label('Email Address')
+                    ->label('البريد الإلكتروني')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('phone')
+                    ->label('رقم الهاتف')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('birth_date')
-                    ->label('Birth Date')
+                    ->label('تاريخ الميلاد')
                     ->date()
                     ->sortable()
                     ->toggleable(),
 
                 ImageColumn::make('profile_image')
-                    ->label('Profile'),
+                    ->label('الصورة'),
 
                 TextColumn::make('gender')
+                    ->label('الجنس')
                     ->badge()
                     ->searchable()
                     ->toggleable(),
 
                 TextColumn::make('location.name')
-                    ->label('Location')
+                    ->label('الموقع')
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -65,14 +67,14 @@ class PatientsTable
             ->filters([
                 SelectFilter::make('gender')
                     ->options([
-                        'male' => 'Male',
-                        'female' => 'Female',
+                        'male' => 'ذكر',
+                        'female' => 'أنثى',
                     ])
-                    ->label('Gender'),
+                    ->label('الجنس'),
 
                 SelectFilter::make('location_id')
                     ->relationship('location', 'name')
-                    ->label('Location'),
+                    ->label('الموقع'),
             ])
             ->recordActions([
                 EditAction::make(),

@@ -18,9 +18,15 @@ class DoctorDaysOffResource extends Resource
 {
     protected static ?string $model = DoctorDaysOffs::class;
 
+    protected static ?string $modelLabel = 'إجازة طبيب';
+
+    protected static ?string $pluralModelLabel = 'أيام الإجازة للأطباء';
+
+    protected static ?string $navigationLabel = 'أيام الإجازة للأطباء';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'DoctorDaysOff';
+    protected static ?string $recordTitleAttribute = 'id';
 
     public static function form(Schema $schema): Schema
     {

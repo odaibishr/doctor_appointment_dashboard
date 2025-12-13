@@ -15,17 +15,22 @@ class DaysTable
         return $table
             ->columns([
                 TextColumn::make('day_name')
+                    ->label('اليوم')
                     ->searchable(),
                 TextColumn::make('short_name')
+                    ->label('الاختصار')
                     ->searchable(),
                 TextColumn::make('day_number')
+                    ->label('رقم اليوم')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

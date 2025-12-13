@@ -17,74 +17,74 @@ class DoctorForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Full Name')
+                    ->label('الاسم الكامل')
                     ->required()
                     ->columnSpan(2),
 
                 TextInput::make('email')
-                    ->label('Email Address')
+                    ->label('البريد الإلكتروني')
                     ->email()
                     ->required(),
 
                 TextInput::make(name: 'password')
-                    ->label('Password')
+                    ->label('كلمة المرور')
                     ->password()
                     ->required(),
 
                 TextInput::make('phone')
-                    ->label('Phone')
+                    ->label('رقم الهاتف')
                     ->tel()
                     ->required()
                     ->columnSpan(1),
 
                 Select::make('gender')
-                    ->label('Gender')
+                    ->label('الجنس')
                     ->options([
-                        'Male' => 'Male',
-                        'Female' => 'Female',
+                        'Male' => 'ذكر',
+                        'Female' => 'أنثى',
                     ])
                     ->required()
                     ->columnSpan(1),
 
                 DatePicker::make('birthday')
-                    ->label('Birthday')
+                    ->label('تاريخ الميلاد')
                     ->columnSpan(1),
 
                 Select::make('specialty_id')
-                    ->label('Specialty')
+                    ->label('التخصص')
                     ->relationship('specialty', 'name')
                     ->required()
                     ->columnSpan(1),
 
                 Select::make('location_id')
-                    ->label('Location')
+                    ->label('الموقع')
                     ->relationship('location', 'name')
                     ->required()
                     ->columnSpan(1),
 
                 Select::make('hospital_id')
-                    ->label('Hospital')
+                    ->label('المستشفى')
                     ->relationship('hospital', 'name')
                     ->columnSpan(1),
 
                 Textarea::make('aboutus')
-                    ->label('About Us')
+                    ->label('نبذة عن الطبيب')
                     ->columnSpanFull(),
 
                 Textarea::make('services')
-                    ->label('Services')
+                    ->label('الخدمات')
                     ->columnSpanFull(),
 
                 Toggle::make('is_featured')
-                    ->label('Featured')
+                    ->label('مميز')
                     ->columnSpan(1),
 
                 Toggle::make('is_top_doctor')
-                    ->label('Top Doctor')
+                    ->label('طبيب مميز')
                     ->columnSpan(1),
 
                 FileUpload::make('profile_image')
-                    ->label('Profile Image')
+                    ->label('الصورة الشخصية')
                     ->image()
                     // ->imagePreviewHeight(200)
                     // ->imageCropAspectRatio('1:1')

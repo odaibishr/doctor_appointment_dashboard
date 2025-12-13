@@ -14,23 +14,29 @@ class DoctorSchedulesTable
     {
         return $table
             ->columns([
-                TextColumn::make('doctor_id')
-                    ->numeric()
+                TextColumn::make('doctor.name')
+                    ->label('الطبيب')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('day_id')
-                    ->numeric()
+                TextColumn::make('day.day_name')
+                    ->label('اليوم')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('start_time')
+                    ->label('بداية العمل')
                     ->time()
                     ->sortable(),
                 TextColumn::make('end_time')
+                    ->label('نهاية العمل')
                     ->time()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
