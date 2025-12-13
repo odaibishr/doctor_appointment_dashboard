@@ -61,7 +61,7 @@ class DoctorsTable
                     ->boolean(),
 
                 IconColumn::make('is_top_doctor')
-                    ->label('طبيب مميز')
+                    ->label('افضل الاطباء')
                     ->boolean()
                     ->toggleable(),
 
