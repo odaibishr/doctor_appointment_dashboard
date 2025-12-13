@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\FontProviders\BunnyFontProvider;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -30,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
                 app()->setLocale('ar');
                 app()->setFallbackLocale('ar');
             })
+            ->font('Cairo', 'https://fonts.bunny.net/css?family=cairo:300,400,500,600,700&display=swap', BunnyFontProvider::class)
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Amber,
