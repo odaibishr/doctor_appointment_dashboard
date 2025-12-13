@@ -26,6 +26,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->bootUsing(function (): void {
+                app()->setLocale('ar');
+                app()->setFallbackLocale('ar');
+            })
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Amber,
             ])

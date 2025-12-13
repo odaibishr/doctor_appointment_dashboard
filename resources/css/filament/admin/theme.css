@@ -1,0 +1,30 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+html[dir='rtl'] {
+    direction: rtl;
+}
+
+html[dir='rtl'] .fi-breadcrumbs,
+html[dir='rtl'] .fi-page-header-heading,
+html[dir='rtl'] .fi-section-header-heading,
+html[dir='rtl'] .fi-ta-header-cell,
+html[dir='rtl'] .fi-ta-cell,
+html[dir='rtl'] .fi-fo-field-wrp-label,
+html[dir='rtl'] .fi-fo-field-wrp-hint {
+    text-align: right;
+}
+
+html[dir='rtl'] .fi-fo-text-input input,
+html[dir='rtl'] .fi-fo-textarea textarea,
+html[dir='rtl'] .fi-fo-rich-editor,
+html[dir='rtl'] .fi-fo-select select {
+    text-align: right;
+}
+
+html[dir='rtl'] .fi-fo-text-input input[type='email'],
+html[dir='rtl'] .fi-fo-text-input input[type='tel'],
+html[dir='rtl'] .fi-fo-text-input input[type='number'],
+html[dir='rtl'] .fi-fo-text-input input[type='url'] {
+    direction: ltr;
+    text-align: left;
+}
