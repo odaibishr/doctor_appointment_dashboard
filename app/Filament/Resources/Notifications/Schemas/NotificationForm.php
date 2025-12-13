@@ -23,9 +23,11 @@ class NotificationForm
                     ->required()
                     ->columnSpanFull(),
 
-                Select::make('patient_id')
+                Select::make('user_id')
                     ->label('المريض')
-                    ->relationship('patient', 'name')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required()
                     ->columnSpan(2),
             ]);

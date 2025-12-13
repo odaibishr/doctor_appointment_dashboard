@@ -16,12 +16,16 @@ class ReviewForm
                 Select::make('doctor_id')
                     ->label('الطبيب')
                     ->relationship('doctor', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required()
                     ->columnSpan(2),
 
-                Select::make('patient_id')
+                Select::make('user_id')
                     ->label('المريض')
-                    ->relationship('patient', 'name')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required()
                     ->columnSpan(2),
 
@@ -34,7 +38,7 @@ class ReviewForm
                     ->default(0)
                     ->columnSpan(1),
 
-                Textarea::make('description')
+                Textarea::make('comment')
                     ->label('التعليق')
                     ->columnSpanFull(),
             ]);

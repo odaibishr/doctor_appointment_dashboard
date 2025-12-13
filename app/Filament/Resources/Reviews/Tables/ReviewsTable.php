@@ -20,7 +20,7 @@ class ReviewsTable
                     ->sortable()
                     ->columnSpan(2),
 
-                TextColumn::make('patient.name')
+                TextColumn::make('user.name')
                     ->label('المريض')
                     ->searchable()
                     ->sortable()
@@ -32,7 +32,7 @@ class ReviewsTable
                     ->sortable()
                     ->columnSpan(1),
 
-                TextColumn::make('description')
+                TextColumn::make('comment')
                     ->label('التعليق')
                     ->limit(50)
                     ->searchable()

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Doctors\Schemas;
 
 use App\Models\Location;
 use App\Models\Hospital;
+use App\Models\Specialty;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -55,6 +56,39 @@ class DoctorForm
                 Select::make('specialty_id')
                     ->label('التخصص')
                     ->relationship('specialty', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->label('اسم التخصص')
+                            ->required()
+                            ->maxLength(255),
+                        FileUpload::make('icon')
+                            ->label('الأيقونة')
+                            ->image()
+                            ->disk('public')
+                            ->directory('specialties')
+                            ->columnSpan(2),
+                        Toggle::make('is_active')
+                            ->label('مفعل')
+                            ->default(true),
+                    ])
+                    ->createOptionAction(fn ($action) => $action->modalHeading('إضافة تخصص')->modalSubmitActionLabel('حفظ'))
+                    ->createOptionUsing(function (array $data): int {
+                        $name = trim((string) ($data['name'] ?? ''));
+
+                        $existing = Specialty::query()
+                            ->when($name !== '', fn ($q) => $q->where('name', $name))
+                            ->first();
+
+                        if ($existing) {
+                            $existing->fill($data)->save();
+
+                            return (int) $existing->getKey();
+                        }
+
+                        return (int) Specialty::query()->create($data)->getKey();
+                    })
                     ->required()
                     ->columnSpan(1),
 
@@ -140,6 +174,48 @@ class DoctorForm
                             ->relationship('location', 'name')
                             ->searchable()
                             ->preload()
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->label('اسم الموقع')
+                                    ->required()
+                                    ->maxLength(255),
+                                TextInput::make('lat')
+                                    ->label('خط العرض')
+                                    ->numeric()
+                                    ->required(),
+                                TextInput::make('lng')
+                                    ->label('خط الطول')
+                                    ->numeric()
+                                    ->required(),
+                            ])
+                            ->createOptionAction(fn ($action) => $action->modalHeading('إضافة موقع')->modalSubmitActionLabel('حفظ'))
+                            ->createOptionUsing(function (array $data): int {
+                                $name = trim((string) ($data['name'] ?? ''));
+                                $lat = (string) ($data['lat'] ?? '');
+                                $lng = (string) ($data['lng'] ?? '');
+
+                                $existing = Location::query()
+                                    ->when($name !== '', fn ($q) => $q->where('name', $name))
+                                    ->when($lat !== '', fn ($q) => $q->where('lat', $lat))
+                                    ->when($lng !== '', fn ($q) => $q->where('lng', $lng))
+                                    ->first();
+
+                                if ($existing) {
+                                    $existing->fill([
+                                        'name' => $name,
+                                        'lat' => $lat,
+                                        'lng' => $lng,
+                                    ])->save();
+
+                                    return (int) $existing->getKey();
+                                }
+
+                                return (int) Location::query()->create([
+                                    'name' => $name,
+                                    'lat' => $lat,
+                                    'lng' => $lng,
+                                ])->getKey();
+                            })
                             ->required(),
                         FileUpload::make('image')
                             ->label('شعار أو صورة المستشفى')

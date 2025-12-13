@@ -13,7 +13,13 @@ class PaymentGatewayDetail extends Model
         'gateway_name',
         'api_key',
         'api_secret',
+        'is_active',
+        'logo',
         'status',
         'logo_url',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 }

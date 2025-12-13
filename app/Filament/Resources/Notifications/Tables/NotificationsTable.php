@@ -15,15 +15,19 @@ class NotificationsTable
         return $table
             ->columns([
                 TextColumn::make('title')
+                    ->label('العنوان')
                     ->searchable(),
-                TextColumn::make('patient_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->label('المريض')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
