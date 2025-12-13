@@ -53,6 +53,7 @@ Route::prefix('v1')->group(function () {
                 });
                 Route::prefix('hospital')->controller(HospitalController::class)->group(function () {
                     Route::post('createHospital', 'createHospital');
+                    Route::get('getHospital/{id}', 'getHospitalDetails');
                     Route::put('updateHospital/{id}', 'updateHospital');
                     Route::delete('deleteHospital/{id}', 'deleteHospital');
                     Route::get('getAllHospitals', 'getAllHospitals');

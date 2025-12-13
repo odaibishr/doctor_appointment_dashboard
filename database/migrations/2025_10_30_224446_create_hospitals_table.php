@@ -26,7 +26,7 @@ return new class extends Migration
             // $table->foreignId('doctor_id')
             // ->constrained('doctors')
             // ->nullOnDelete();
-            
+                
             $table->timestamps();
         });
     }

@@ -45,6 +45,20 @@ class HospitalController extends Controller
 
     }
 
+    public function getHospitalDetails($id)
+    {
+        $hospital = Hospital::with('location', 'doctors')->findOrFail($id);
+        if (!$hospital) {
+            return response()->json([
+                'message' => 'Hospital not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $hospital
+        ], 200);
+    }
+
     public function updateHospital(Request $request, $id)
     {
 

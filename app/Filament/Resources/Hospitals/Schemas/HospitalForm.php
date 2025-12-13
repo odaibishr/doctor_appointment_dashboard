@@ -38,6 +38,7 @@ class HospitalForm
                 FileUpload::make('image')
                     ->label('Hospital Logo / Image')
                     ->image()
+                    ->disk('public')
                     ->directory('hospitals'),
 
                 Select::make('location_id')
