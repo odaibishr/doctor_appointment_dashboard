@@ -38,6 +38,8 @@ class PaymentGatewayDetailForm
                     ->imagePreviewHeight(100)
                     ->imageResizeTargetHeight(100)
                     ->imageResizeTargetWidth(100)
+                    ->disk('public')
+                    ->directory('payment-gateway-logos')
                     ->columnSpan(2),
             ]);
     }

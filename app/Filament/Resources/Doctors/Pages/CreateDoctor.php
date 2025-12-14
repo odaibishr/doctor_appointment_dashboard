@@ -39,7 +39,7 @@ class CreateDoctor extends CreateRecord
 
         if (User::query()->where('email', $email)->exists()) {
             throw ValidationException::withMessages([
-                'email' => 'البريد الإلكتروني مستخدم مسبقاً في حساب آخر.',
+                'email' => 'البريد الإلكتروني مستخدم مسبقًا.',
             ]);
         }
 
@@ -55,3 +55,4 @@ class CreateDoctor extends CreateRecord
         return $data;
     }
 }
+

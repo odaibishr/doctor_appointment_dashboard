@@ -24,4 +24,20 @@ class DoctorDaysOff extends Model
     {
         return $this->belongsTo(Day::class);
     }
+
+    protected static function booted(): void
+    {
+        $sync = function (self $dayOff): void {
+            $doctor = $dayOff->doctor()->first();
+
+            if (! $doctor) {
+                return;
+            }
+
+            app(\App\Services\DoctorScheduleSyncService::class)->syncDefaultSchedulesForDoctor($doctor);
+        };
+
+        static::saved($sync);
+        static::deleted($sync);
+    }
 }

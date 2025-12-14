@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(DaysSeeder::class);
+
         $location = Location::query()->firstOrCreate(
             ['name' => 'Default'],
             ['lat' => '0', 'lng' => '0'],

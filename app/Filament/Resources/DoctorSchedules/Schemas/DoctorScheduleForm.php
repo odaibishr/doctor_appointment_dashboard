@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\DoctorSchedules\Schemas;
 
+use App\Models\DoctorDaysOff;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class DoctorScheduleForm
@@ -24,17 +26,40 @@ class DoctorScheduleForm
 
                 Select::make('day_id')
                     ->label('اليوم')
-                    ->relationship('day', 'day_name')
+                    ->relationship(
+                        'day',
+                        'day_name',
+                        modifyQueryUsing: function (Builder $query): Builder {
+                            $user = Auth::user();
+
+                            if (! $user?->isDoctor()) {
+                                return $query;
+                            }
+
+                            $doctorId = $user->doctor?->id;
+
+                            if (! $doctorId) {
+                                return $query->whereRaw('1 = 0');
+                            }
+
+                            $daysOff = DoctorDaysOff::query()
+                                ->where('doctor_id', $doctorId)
+                                ->pluck('day_id')
+                                ->all();
+
+                            return $daysOff !== [] ? $query->whereNotIn('id', $daysOff) : $query;
+                        },
+                    )
                     ->required()
                     ->columnSpan(2),
 
                 TimePicker::make('start_time')
-                    ->label('وقت البداية')
+                    ->label('بداية الدوام')
                     ->required()
                     ->columnSpan(1),
 
                 TimePicker::make('end_time')
-                    ->label('وقت النهاية')
+                    ->label('نهاية الدوام')
                     ->required()
                     ->columnSpan(1),
             ]);

@@ -49,7 +49,7 @@ class Doctor extends Model
             return $path;
         }
 
-        return Storage::disk('public')->url($path);
+        return Storage::disk(name: 'public')->url($path);
     }
 
     public function specialty()
@@ -95,5 +95,12 @@ class Doctor extends Model
     public function favoriteDoctors()
     {
         return $this->hasMany(FavoriteDoctor::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function (self $doctor): void {
+            app(\App\Services\DoctorScheduleSyncService::class)->syncDefaultSchedulesForDoctor($doctor);
+        });
     }
 }
