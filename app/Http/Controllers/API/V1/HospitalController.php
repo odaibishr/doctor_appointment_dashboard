@@ -22,11 +22,13 @@ class HospitalController extends Controller
             'location.lng' => 'required|numeric',
             'location.name' => 'nullable|string',
         ]);
+        
         $location_data = Location::create([
             'lat' => $valdiate_data['location']['lat'],
             'lng' => $valdiate_data['location']['lng'],
             'name' => $valdiate_data['location']['name'] ?? null,
         ]);
+        
         $hospital = Hospital::create([
             'name' => $valdiate_data['name'],
             'phone' => $valdiate_data['phone'],
