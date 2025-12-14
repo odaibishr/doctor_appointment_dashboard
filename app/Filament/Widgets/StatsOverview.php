@@ -59,7 +59,7 @@ class StatsOverview extends StatsOverviewWidget
                     'إيرادات الشهر (مدفوعة)',
                     number_format(
                         Transaction::query()
-                            ->where('status', 'paid')
+                            ->where('status', '!=', 'failed')
                             ->whereBetween('created_at', [$monthStart, now()])
                             ->sum('amount'),
                         2,
@@ -131,4 +131,3 @@ class StatsOverview extends StatsOverviewWidget
         ];
     }
 }
-

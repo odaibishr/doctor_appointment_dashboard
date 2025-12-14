@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Widgets\Concerns\ResolvesDashboardDateRange;
+use App\Models\BookAppointment;
 use App\Models\Doctor;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Cache;
@@ -41,7 +42,13 @@ class TopDoctorsChart extends ChartWidget
         $days = $this->getSelectedDays();
         $range = $this->getDateRange();
 
-        $cacheKey = sprintf('dashboard:top-doctors:%s', $days);
+        $lastUpdatedAt = (string) BookAppointment::query()->max('updated_at');
+
+        $cacheKey = sprintf(
+            'dashboard:top-doctors:%s:%s',
+            $days,
+            $lastUpdatedAt !== '' ? $lastUpdatedAt : '0',
+        );
 
         return Cache::remember($cacheKey, now()->addMinutes(2), function () use ($range) {
             $rows = Doctor::query()
@@ -86,4 +93,3 @@ class TopDoctorsChart extends ChartWidget
         ];
     }
 }
-

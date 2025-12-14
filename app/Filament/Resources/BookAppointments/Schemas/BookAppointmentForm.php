@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Day;
 
 class BookAppointmentForm
 {
@@ -18,22 +19,23 @@ class BookAppointmentForm
                     ->label('الطبيب')
                     ->relationship('doctor', 'name')
                     ->required()
-                    ->disabled(fn (string $operation) => ! Auth::user()?->isAdmin() && $operation === 'edit')
-                    ->hidden(fn () => Auth::user()?->isDoctor())
+                    ->disabled(fn(string $operation) => !Auth::user()?->isAdmin() && $operation === 'edit')
+                    ->hidden(fn() => Auth::user()?->isDoctor())
                     ->columnSpan(2),
 
                 Select::make('user_id')
                     ->label('المريض')
                     ->relationship('user', 'name')
                     ->required()
-                    ->default(fn () => Auth::id())
-                    ->disabled(fn () => ! Auth::user()?->isAdmin())
-                    ->hidden(fn () => ! Auth::user()?->isAdmin())
+                    ->default(fn() => Auth::id())
+                    ->disabled(fn() => !Auth::user()?->isAdmin())
+                    ->hidden(fn() => !Auth::user()?->isAdmin())
                     ->columnSpan(2),
 
                 Select::make('doctor_schedule_id')
                     ->label('جدول الطبيب')
-                    ->relationship('schedule', 'id')
+                    ->relationship('schedule', 'day_id', )
+                    ->getOptionLabelUsing(fn($value) => Day::query()->where('id', $value)->value('day_name'))
                     ->required()
                     ->columnSpan(2),
 
@@ -51,14 +53,14 @@ class BookAppointmentForm
                     ])
                     ->default('pending')
                     ->required()
-                    ->disabled(fn () => ! Auth::user()?->isAdmin() && ! Auth::user()?->isDoctor())
-                    ->visible(fn () => Auth::user()?->isAdmin() || Auth::user()?->isDoctor())
+                    ->disabled(fn() => !Auth::user()?->isAdmin() && !Auth::user()?->isDoctor())
+                    ->visible(fn() => Auth::user()?->isAdmin() || Auth::user()?->isDoctor())
                     ->columnSpan(1),
 
                 Toggle::make('is_completed')
                     ->label('مكتمل')
-                    ->disabled(fn () => ! Auth::user()?->isAdmin() && ! Auth::user()?->isDoctor())
-                    ->visible(fn () => Auth::user()?->isAdmin() || Auth::user()?->isDoctor())
+                    ->disabled(fn() => !Auth::user()?->isAdmin() && !Auth::user()?->isDoctor())
+                    ->visible(fn() => Auth::user()?->isAdmin() || Auth::user()?->isDoctor())
                     ->columnSpan(1),
 
                 Select::make('payment_mode')
@@ -68,13 +70,13 @@ class BookAppointmentForm
                         'online' => 'أونلاين',
                     ])
                     ->required()
-                    ->disabled(fn (string $operation) => ! Auth::user()?->isAdmin() && $operation === 'edit')
+                    ->disabled(fn(string $operation) => !Auth::user()?->isAdmin() && $operation === 'edit')
                     ->columnSpan(1),
 
                 Select::make('transaction_id')
                     ->label('رقم العملية')
                     ->relationship('transaction', 'id')
-                    ->hidden(fn () => ! Auth::user()?->isAdmin())
+                    ->hidden(fn() => !Auth::user()?->isAdmin())
                     ->columnSpan(1),
             ]);
     }

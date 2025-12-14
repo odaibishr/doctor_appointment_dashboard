@@ -38,11 +38,14 @@ class AppointmentsTrendChart extends ChartWidget
         $days = $this->getSelectedDays();
         $range = $this->getDateRange();
 
+        $lastUpdatedAt = (string) (clone $this->getScopedAppointmentsQuery())->max('updated_at');
+
         $cacheKey = sprintf(
-            'dashboard:appointments-trend:%s:%s:%s',
+            'dashboard:appointments-trend:%s:%s:%s:%s',
             $user?->roleNormalized() ?? 'guest',
             $user?->id ?? 0,
             $days,
+            $lastUpdatedAt !== '' ? $lastUpdatedAt : '0',
         );
 
         return Cache::remember($cacheKey, now()->addMinutes(2), function () use ($range) {
@@ -100,4 +103,3 @@ class AppointmentsTrendChart extends ChartWidget
         ];
     }
 }
-

@@ -42,7 +42,15 @@ class RevenueTrendChart extends ChartWidget
         $days = $this->getSelectedDays();
         $range = $this->getDateRange();
 
-        $cacheKey = sprintf('dashboard:revenue-trend:%s', $days);
+        $lastUpdatedAt = (string) Transaction::query()
+            ->where('status', 'paid')
+            ->max('updated_at');
+
+        $cacheKey = sprintf(
+            'dashboard:revenue-trend:%s:%s',
+            $days,
+            $lastUpdatedAt !== '' ? $lastUpdatedAt : '0',
+        );
 
         return Cache::remember($cacheKey, now()->addMinutes(2), function () use ($range) {
             $totalsByDate = Transaction::query()
@@ -95,4 +103,3 @@ class RevenueTrendChart extends ChartWidget
         ];
     }
 }
-

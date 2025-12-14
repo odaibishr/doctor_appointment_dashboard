@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 
 class Doctor extends Model
@@ -49,7 +50,10 @@ class Doctor extends Model
             return $path;
         }
 
-        return Storage::disk(name: 'public')->url($path);
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk('public');
+
+        return $disk->url($path);
     }
 
     public function specialty()
