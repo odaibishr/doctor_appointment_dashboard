@@ -53,7 +53,7 @@ class PatientController extends Controller
                 ], 401);
             }
 
-            $patient = Patient::where('user_id', $user->id)->first();
+            $patient = Patient::where('user_id', $user->id)->with('user')->first();
 
             if (!$patient) {
                 return response()->json([

@@ -70,10 +70,8 @@ class BookAppointmentController extends Controller
     {
         $userId = Auth::id();
 
-        
-
         $appointments = BookAppointment::where('user_id', $userId)
-            ->with(['doctor','schedule',]) 
+            ->with(['doctor','schedule','transaction']) 
             ->get();
 
         return response()->json([
