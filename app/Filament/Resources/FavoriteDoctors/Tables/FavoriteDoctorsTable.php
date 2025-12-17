@@ -14,7 +14,7 @@ class FavoriteDoctorsTable
     {
         return $table
             ->columns([
-                TextColumn::make('doctor.name')
+                TextColumn::make('doctor.user.name')
                     ->label('الطبيب')
                     ->searchable()
                     ->sortable(),

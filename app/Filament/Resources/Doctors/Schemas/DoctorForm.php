@@ -101,7 +101,7 @@ class DoctorForm
 
                 Select::make('location_id')
                     ->label('الموقع')
-                    ->relationship('location', 'name')
+                    ->options(fn (): array => Location::query()->orderBy('name')->pluck('name', 'id')->all())
                     ->searchable()
                     ->preload()
                     ->createOptionForm([
@@ -237,4 +237,3 @@ class DoctorForm
             ]);
     }
 }
-

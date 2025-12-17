@@ -48,11 +48,24 @@ class CreateDoctor extends CreateRecord
             'email' => $email,
             'password' => Hash::make($password),
             'role' => User::ROLE_DOCTOR,
+            'phone' => (string) ($data['phone'] ?? ''),
+            'gender' => (string) ($data['gender'] ?? ''),
+            'location_id' => $data['location_id'] ?? null,
+            'profile_image' => $data['profile_image'] ?? null,
         ]);
 
         $data['user_id'] = $user->id;
 
+        unset(
+            $data['name'],
+            $data['email'],
+            $data['password'],
+            $data['phone'],
+            $data['gender'],
+            $data['location_id'],
+            $data['profile_image'],
+        );
+
         return $data;
     }
 }
-

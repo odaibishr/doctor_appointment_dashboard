@@ -11,6 +11,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DoctorsTable
 {
@@ -18,17 +19,17 @@ class DoctorsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('user.name')
                     ->label('اسم الطبيب')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('email')
+                TextColumn::make('user.email')
                     ->label('البريد الإلكتروني')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('phone')
+                TextColumn::make('user.phone')
                     ->label('رقم الهاتف')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -38,7 +39,7 @@ class DoctorsTable
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('location.name')
+                TextColumn::make('user.location.name')
                     ->label('الموقع')
                     ->sortable(),
 
@@ -51,7 +52,7 @@ class DoctorsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('gender')
+                TextColumn::make('user.gender')
                     ->label('الجنس')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -65,11 +66,11 @@ class DoctorsTable
                     ->boolean()
                     ->toggleable(),
 
-                ImageColumn::make('profile_image')
+                ImageColumn::make('user.profile_image')
                     ->label('الصورة')
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('birth_day')
+                TextColumn::make('user.birth_date')
                     ->label('تاريخ الميلاد')
                     ->date()
                     ->sortable()
@@ -93,7 +94,14 @@ class DoctorsTable
                         'male' => 'ذكر',
                         'female' => 'أنثى',
                     ])
-                    ->label('الجنس'),
+                    ->label('الجنس')
+                    ->query(function (Builder $query, array $data): Builder {
+                        $gender = $data['value'] ?? null;
+
+                        return $gender
+                            ? $query->whereHas('user', fn (Builder $q) => $q->where('gender', $gender))
+                            : $query;
+                    }),
 
                 SelectFilter::make('specialty_id')
                     ->relationship('specialty', 'name')

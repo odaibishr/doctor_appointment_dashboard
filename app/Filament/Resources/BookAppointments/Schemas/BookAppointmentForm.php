@@ -2,12 +2,13 @@
 
 namespace App\Filament\Resources\BookAppointments\Schemas;
 
+use App\Models\Doctor;
+use App\Models\Day;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Day;
 
 class BookAppointmentForm
 {
@@ -17,7 +18,11 @@ class BookAppointmentForm
             ->components([
                 Select::make('doctor_id')
                     ->label('الطبيب')
-                    ->relationship('doctor', 'name')
+                    ->options(fn (): array => Doctor::query()
+                        ->join('users', 'users.id', '=', 'doctors.user_id')
+                        ->orderBy('users.name')
+                        ->pluck('users.name', 'doctors.id')
+                        ->all())
                     ->required()
                     ->disabled(fn(string $operation) => !Auth::user()?->isAdmin() && $operation === 'edit')
                     ->hidden(fn() => Auth::user()?->isDoctor())
@@ -81,4 +86,3 @@ class BookAppointmentForm
             ]);
     }
 }
-

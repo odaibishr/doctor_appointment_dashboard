@@ -16,15 +16,6 @@ class PatientForm
     {
         return $schema
             ->components([
-                Select::make('user_id')
-                    ->label('حساب المستخدم')
-                    ->relationship('user', 'name')
-                    ->required()
-                    ->default(fn () => Auth::id())
-                    ->disabled(fn () => ! Auth::user()?->isAdmin())
-                    ->hidden(fn () => ! Auth::user()?->isAdmin())
-                    ->columnSpan(2),
-
                 TextInput::make('phone')
                     ->label('رقم الهاتف')
                     ->tel()
@@ -108,4 +99,3 @@ class PatientForm
             ]);
     }
 }
-

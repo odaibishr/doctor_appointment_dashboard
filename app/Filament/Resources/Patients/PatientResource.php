@@ -7,7 +7,7 @@ use App\Filament\Resources\Patients\Pages\EditPatient;
 use App\Filament\Resources\Patients\Pages\ListPatients;
 use App\Filament\Resources\Patients\Schemas\PatientForm;
 use App\Filament\Resources\Patients\Tables\PatientsTable;
-use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
@@ -18,7 +18,7 @@ use Filament\Tables\Table;
 
 class PatientResource extends Resource
 {
-    protected static ?string $model = Patient::class;
+    protected static ?string $model = User::class;
 
     protected static ?string $modelLabel = 'مريض';
 
@@ -40,6 +40,8 @@ class PatientResource extends Resource
         $query = parent::getEloquentQuery();
         $user = Auth::user();
 
+        $query->where('role', User::ROLE_PATIENT);
+
         if (! $user) {
             return $query;
         }
@@ -49,7 +51,7 @@ class PatientResource extends Resource
         }
 
         if ($user->isPatient()) {
-            return $query->where('user_id', $user->id);
+            return $query->whereKey($user->id);
         }
 
         return $query->whereRaw('1 = 0');

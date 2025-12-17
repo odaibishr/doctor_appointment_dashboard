@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Doctor;
 use App\Models\Location;
-use App\Models\Patient;
 use App\Models\Specialty;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -33,11 +32,14 @@ class DatabaseSeeder extends Seeder
         );
 
         $admin = User::query()->firstOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => 'odaibishr@gmail.com'],
             [
-                'name' => 'Admin',
-                'password' => Hash::make('password'),
+                'name' => 'عدي بشر',
+                'password' => Hash::make('odaibishr'),
                 'role' => User::ROLE_ADMIN,
+                'phone' => '0000000000',
+                'gender' => 'male',
+                'location_id' => $location->id,
             ],
         );
 
@@ -47,19 +49,16 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Doctor User',
                 'password' => Hash::make('password'),
                 'role' => User::ROLE_DOCTOR,
+                'phone' => '0000000000',
+                'gender' => 'Male',
+                'location_id' => $location->id,
             ],
         );
 
         Doctor::query()->firstOrCreate(
             ['user_id' => $doctorUser->id],
             [
-                'name' => 'Doctor Profile',
-                'email' => 'doctor.profile@example.com',
-                'phone' => '0000000000',
-                'location_id' => $location->id,
                 'specialty_id' => $specialty->id,
-                'gender' => 'Male',
-                'password' => Hash::make('password'),
             ],
         );
 
@@ -69,12 +68,6 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Patient User',
                 'password' => Hash::make('password'),
                 'role' => User::ROLE_PATIENT,
-            ],
-        );
-
-        Patient::query()->firstOrCreate(
-            ['user_id' => $patientUser->id],
-            [
                 'phone' => '0000000000',
                 'gender' => 'male',
                 'location_id' => $location->id,

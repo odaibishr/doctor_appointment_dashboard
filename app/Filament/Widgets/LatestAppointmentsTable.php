@@ -29,7 +29,7 @@ class LatestAppointmentsTable extends TableWidget
             ->defaultPaginationPageOption(5)
             ->paginationPageOptions([5, 10, 25])
             ->columns([
-                TextColumn::make('doctor.name')
+                TextColumn::make('doctor.user.name')
                     ->label('الطبيب')
                     ->searchable()
                     ->sortable(),
@@ -63,4 +63,3 @@ class LatestAppointmentsTable extends TableWidget
             });
     }
 }
-

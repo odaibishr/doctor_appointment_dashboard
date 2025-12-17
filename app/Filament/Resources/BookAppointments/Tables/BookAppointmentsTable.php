@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\BookAppointments\Tables;
 
+use App\Models\Doctor;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -18,7 +19,7 @@ class BookAppointmentsTable
     {
         return $table
             ->columns([
-                TextColumn::make('doctor.name')
+                TextColumn::make('doctor.user.name')
                     ->label('الطبيب')
                     ->searchable()
                     ->sortable(),
@@ -69,7 +70,11 @@ class BookAppointmentsTable
             ])
             ->filters([
                 SelectFilter::make('doctor_id')
-                    ->relationship('doctor', 'name')
+                    ->options(fn (): array => Doctor::query()
+                        ->join('users', 'users.id', '=', 'doctors.user_id')
+                        ->orderBy('users.name')
+                        ->pluck('users.name', 'doctors.id')
+                        ->all())
                     ->label('الطبيب'),
 
                 SelectFilter::make('user_id')

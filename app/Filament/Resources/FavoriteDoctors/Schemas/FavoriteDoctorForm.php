@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\FavoriteDoctors\Schemas;
 
+use App\Models\Doctor;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,11 @@ class FavoriteDoctorForm
             ->components([
                 Select::make('doctor_id')
                     ->label('الطبيب')
-                    ->relationship('doctor', 'name')
+                    ->options(fn (): array => Doctor::query()
+                        ->join('users', 'users.id', '=', 'doctors.user_id')
+                        ->orderBy('users.name')
+                        ->pluck('users.name', 'doctors.id')
+                        ->all())
                     ->searchable()
                     ->required(),
 
@@ -28,4 +33,3 @@ class FavoriteDoctorForm
             ]);
     }
 }
-

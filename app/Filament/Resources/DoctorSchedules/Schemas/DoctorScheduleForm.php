@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\DoctorSchedules\Schemas;
 
+use App\Models\Doctor;
 use App\Models\DoctorDaysOff;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
@@ -17,7 +18,11 @@ class DoctorScheduleForm
             ->components([
                 Select::make('doctor_id')
                     ->label('الطبيب')
-                    ->relationship('doctor', 'name')
+                    ->options(fn (): array => Doctor::query()
+                        ->join('users', 'users.id', '=', 'doctors.user_id')
+                        ->orderBy('users.name')
+                        ->pluck('users.name', 'doctors.id')
+                        ->all())
                     ->required()
                     ->default(fn () => Auth::user()?->doctor?->id)
                     ->disabled(fn () => ! Auth::user()?->isAdmin())
@@ -65,4 +70,3 @@ class DoctorScheduleForm
             ]);
     }
 }
-

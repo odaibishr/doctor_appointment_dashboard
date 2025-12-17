@@ -4,39 +4,40 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
 class Doctor extends Model
 {
     //
 
-    protected $fillable = [
-        'user_id',
-        'name',
-        'email',
-        'aboutus',
-        'days_off',
-        'address',
-        'phone',
-        'location_id',
-        'specialty_id',
-        'department_id',
-        'gender',
-        'is_featured',
-        'is_top_doctor',
-        'profile_image',
-        'birthday',
-        'services',
-        'password',
+    protected $with = [
+        'user',
+        'user.location',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
+    protected $fillable = [
+        'user_id',
+        'aboutus',
+        'days_off',
+        'specialty_id',
+        'department_id',
+        'is_featured',
+        'is_top_doctor',
+        'services',
+        'hospital_id',
+        'birthday',
     ];
 
     protected $appends = [
         'profile_image_url',
+        'name',
+        'email',
+        'phone',
+        'gender',
+        'profile_image',
+        'location_id',
+        'birth_day',
     ];
 
     public function getProfileImageUrlAttribute(): ?string
@@ -61,14 +62,77 @@ class Doctor extends Model
         return $this->belongsTo(Specialty::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function location()
+    public function getNameAttribute($value): ?string
     {
-        return $this->belongsTo(Location::class);
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->user?->name;
+    }
+
+    public function getEmailAttribute($value): ?string
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->user?->email;
+    }
+
+    public function getPhoneAttribute($value): ?string
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->user?->phone;
+    }
+
+    public function getGenderAttribute($value): ?string
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->user?->gender;
+    }
+
+    public function getProfileImageAttribute($value): ?string
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->user?->profile_image;
+    }
+
+    public function getLocationIdAttribute($value): ?int
+    {
+        if ($value !== null && $value !== '') {
+            return (int) $value;
+        }
+
+        return $this->user?->location_id ? (int) $this->user->location_id : null;
+    }
+
+    public function getLocationAttribute(): ?Location
+    {
+        return $this->user?->location;
+    }
+
+    public function getBirthDayAttribute($value): mixed
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->user?->birth_date;
     }
 
     public function schedules()

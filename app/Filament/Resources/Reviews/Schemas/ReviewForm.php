@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Reviews\Schemas;
 
+use App\Models\Doctor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -16,7 +17,11 @@ class ReviewForm
             ->components([
                 Select::make('doctor_id')
                     ->label('الطبيب')
-                    ->relationship('doctor', 'name')
+                    ->options(fn (): array => Doctor::query()
+                        ->join('users', 'users.id', '=', 'doctors.user_id')
+                        ->orderBy('users.name')
+                        ->pluck('users.name', 'doctors.id')
+                        ->all())
                     ->searchable()
                     ->preload()
                     ->required()
@@ -48,4 +53,3 @@ class ReviewForm
             ]);
     }
 }
-

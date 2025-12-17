@@ -17,12 +17,12 @@ class PatientsTable
         return $table
             ->columns([
 
-                TextColumn::make('user.name')
+                TextColumn::make('name')
                     ->label('الاسم الكامل')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('user.email')
+                TextColumn::make('email')
                     ->label('البريد الإلكتروني')
                     ->searchable()
                     ->sortable(),
@@ -83,7 +83,7 @@ class PatientsTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                        ->visible(fn (): bool => auth()->user()?->can('deleteAny', \App\Models\Patient::class) ?? false),
+                        ->visible(fn (): bool => auth()->user()?->can('deleteAny', \App\Models\User::class) ?? false),
                 ]),
             ]);
     }

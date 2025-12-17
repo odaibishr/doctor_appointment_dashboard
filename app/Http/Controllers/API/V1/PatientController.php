@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
@@ -18,7 +18,8 @@ class PatientController extends Controller
             'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $userId = auth()->user()->id;
+        /** @var User|null $patient */
+        $patient = auth()->user();
 
         $imagePath = null;
 
@@ -27,13 +28,19 @@ class PatientController extends Controller
                 ->store('patients', 'public');
         }
 
-        $patient = Patient::create([
+        if (! $patient) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $patient->update([
             'phone' => $request->phone,
             'birth_date' => $request->birth_date,
             'gender' => $request->gender,
             'location_id' => (int) $request->location_id,
-            'user_id' => $userId,
-            'profile_image' => $imagePath,
+            'profile_image' => $imagePath ?? $patient->profile_image,
+            'role' => $patient->roleNormalized() ?: User::ROLE_PATIENT,
         ]);
 
         return response()->json([
@@ -53,7 +60,7 @@ class PatientController extends Controller
                 ], 401);
             }
 
-            $patient = Patient::where('user_id', $user->id)->with('user')->first();
+            $patient = User::query()->with('location')->find($user->id);
 
             if (!$patient) {
                 return response()->json([

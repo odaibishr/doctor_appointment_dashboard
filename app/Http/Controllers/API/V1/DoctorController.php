@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\FavoriteDoctor;
@@ -16,7 +18,7 @@ class DoctorController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email|unique:doctors,email',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'required|string',
             'aboutus' => 'nullable|string',
 
@@ -34,32 +36,38 @@ class DoctorController extends Controller
 
         $location = Location::create($validated['location']);
 
-        $doctor = Doctor::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'aboutus' => $validated['aboutus'] ?? null,
+            'gender' => $validated['gender'],
             'location_id' => $location->id,
+            'role' => User::ROLE_DOCTOR,
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $doctor = Doctor::create([
+            'user_id' => $user->id,
+            'aboutus' => $validated['aboutus'] ?? null,
             'specialty_id' => $validated['specialty_id'],
             'hospital_id' => $validated['hospital_id'] ?? null,
-            'gender' => $validated['gender'],
             'services' => $validated['services'] ?? null,
-            'password' => bcrypt($validated['password']),
         ]);
 
 
         return response()->json([
             'message' => 'Doctor created successfully',
-            'data' => $doctor->load(['location', 'specialty', 'hospital'])
+            'data' => $doctor->load(['user.location', 'specialty', 'hospital'])
         ], 201);
     }
     public function updateDoctor(Request $request, $id)
     {
         $doctor = Doctor::findOrFail($id);
+        $user = $doctor->user;
 
         $validated = $request->validate([
             'name' => 'sometimes|string',
-            'email' => 'sometimes|email|unique:doctors,email,' . $doctor->id,
+            'email' => 'sometimes|email|unique:users,email,' . ($user?->id ?? 'NULL'),
             'phone' => 'sometimes|string',
             'aboutus' => 'sometimes|string',
 
@@ -78,15 +86,36 @@ class DoctorController extends Controller
 
 
         if ($request->has('location')) {
-            $doctor->location->update($validated['location']);
+            $locationData = $validated['location'] ?? [];
+
+            if ($user?->location) {
+                $user->location->update($locationData);
+            } else {
+                $location = Location::create($locationData);
+                $user?->update(['location_id' => $location->id]);
+            }
         }
 
 
-        $doctor->update($validated);
+        if ($user) {
+            $user->update(array_filter([
+                'name' => $validated['name'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'phone' => $validated['phone'] ?? null,
+                'gender' => $validated['gender'] ?? null,
+            ], fn ($v) => $v !== null));
+        }
+
+        $doctor->update(array_filter([
+            'aboutus' => $validated['aboutus'] ?? null,
+            'specialty_id' => $validated['specialty_id'] ?? null,
+            'hospital_id' => $validated['hospital_id'] ?? null,
+            'services' => $validated['services'] ?? null,
+        ], fn ($v) => $v !== null));
 
         return response()->json([
             'message' => 'Doctor updated successfully',
-            'data' => $doctor->load(['location', 'specialty', 'hospital'])
+            'data' => $doctor->load(['user.location', 'specialty', 'hospital'])
         ], 200);
     }
     public function deleteDoctor($id)
@@ -101,7 +130,7 @@ class DoctorController extends Controller
     {
         $userId = auth()->id();
 
-        $doctors = Doctor::with(['location', 'specialty', 'hospital'])
+        $doctors = Doctor::with(['user.location', 'specialty', 'hospital'])
             ->withCount([
                 'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
                     $query->where('user_id', $userId);
@@ -122,7 +151,7 @@ class DoctorController extends Controller
         $specialtyId = $request->input('specialty_id');
 
         $doctors = Doctor::query()
-            ->with(['location', 'specialty', 'hospital'])
+            ->with(['user.location', 'specialty', 'hospital'])
             ->withCount([
                 'favoriteDoctors as is_favorite' => function ($q) use ($userId) {
                     $q->where('user_id', $userId);
@@ -137,7 +166,9 @@ class DoctorController extends Controller
             // Filter by name or hospital name
             ->when($query, function ($q) use ($query) {
                 $q->where(function ($subQ) use ($query) {
-                    $subQ->where('name', 'LIKE', "%$query%")
+                    $subQ->whereHas('user', function ($q3) use ($query) {
+                        $q3->where('name', 'LIKE', "%$query%");
+                    })
                         ->orWhereHas('hospital', function ($q2) use ($query) {
                             $q2->where('name', 'LIKE', "%{$query}%");
                         });
@@ -157,7 +188,7 @@ class DoctorController extends Controller
         $userId = auth()->id();
 
         $doctor = Doctor::query()
-            ->with(['location', 'specialty', 'hospital', 'schedules.day', 'daysOff.day'])
+            ->with(['user.location', 'specialty', 'hospital', 'schedules.day', 'daysOff.day'])
             ->withCount([
                 'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
                     $query->where('user_id', $userId);

@@ -7,6 +7,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -31,6 +32,12 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'role',
+        'phone',
+        'address',
+        'profile_image',
+        'birth_date',
+        'gender',
+        'location_id',
     ];
 
     /**
@@ -53,6 +60,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
     }
 
@@ -90,9 +98,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(Doctor::class);
     }
 
-    public function patient(): HasOne
+    public function location(): BelongsTo
     {
-        return $this->hasOne(Patient::class);
+        return $this->belongsTo(Location::class);
     }
     public function appointments()
     {

@@ -19,7 +19,8 @@ class Location extends Model
         return $this->hasMany(Doctor::class);
     }
 
-    public function patients(){
-        return $this->hasMany(Patient::class);
+    public function patients()
+    {
+        return $this->hasMany(User::class)->where('role', User::ROLE_PATIENT);
     }
 }

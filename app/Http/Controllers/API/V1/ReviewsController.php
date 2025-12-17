@@ -12,9 +12,11 @@ class ReviewsController extends Controller
 {
     public function createReview(Request $request)
     {
+
+        $userId = Auth::id();
+        
         $validateData=$request->validate([
             'doctor_id'=>'required|exists:doctors,id',
-            'user_id'=>'requird|exist:users,id',
             'rating'=>'nullable|integer|min:1|max:5',
             'comment'=>'required|string',
         ]);
