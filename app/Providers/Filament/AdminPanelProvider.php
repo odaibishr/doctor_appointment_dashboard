@@ -10,7 +10,6 @@ use Filament\FontProviders\BunnyFontProvider;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -34,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->font('Cairo', 'https://fonts.bunny.net/css?family=cairo:300,400,500,600,700&display=swap', BunnyFontProvider::class)
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#364989',
             ])
             ->sidebarCollapsibleOnDesktop()
 
