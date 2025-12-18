@@ -139,6 +139,24 @@ class Doctor extends Model
         return $this->user?->birth_date;
     }
 
+    public function getPriceAttribute($value)
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->price;
+    }
+
+    public function getExperienceAttribute($value)
+    {
+        if ($value !== null && $value !== '') {
+            return $value;
+        }
+
+        return $this->experience;
+    }
+
     public function schedules()
     {
         return $this->hasMany(DoctorSchedule::class);

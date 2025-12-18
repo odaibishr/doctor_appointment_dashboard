@@ -77,15 +77,15 @@ class DoctorForm
                             ->label('نشط')
                             ->default(true),
                     ])
-                    ->createOptionAction(fn ($action) => $action
-                        ->visible(fn () => Auth::user()?->isAdmin())
+                    ->createOptionAction(fn($action) => $action
+                        ->visible(fn() => Auth::user()?->isAdmin())
                         ->modalHeading('إضافة تخصص')
                         ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $name = trim((string) ($data['name'] ?? ''));
 
                         $existing = Specialty::query()
-                            ->when($name !== '', fn ($q) => $q->where('name', $name))
+                            ->when($name !== '', fn($q) => $q->where('name', $name))
                             ->first();
 
                         if ($existing) {
@@ -101,7 +101,7 @@ class DoctorForm
 
                 Select::make('location_id')
                     ->label('الموقع')
-                    ->options(fn (): array => Location::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->options(fn(): array => Location::query()->orderBy('name')->pluck('name', 'id')->all())
                     ->searchable()
                     ->preload()
                     ->createOptionForm([
@@ -118,8 +118,8 @@ class DoctorForm
                             ->numeric()
                             ->required(),
                     ])
-                    ->createOptionAction(fn ($action) => $action
-                        ->visible(fn () => Auth::user()?->isAdmin())
+                    ->createOptionAction(fn($action) => $action
+                        ->visible(fn() => Auth::user()?->isAdmin())
                         ->modalHeading('إضافة موقع')
                         ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
@@ -128,9 +128,9 @@ class DoctorForm
                         $lng = (string) ($data['lng'] ?? '');
 
                         $existing = Location::query()
-                            ->when($name !== '', fn ($q) => $q->where('name', $name))
-                            ->when($lat !== '', fn ($q) => $q->where('lat', $lat))
-                            ->when($lng !== '', fn ($q) => $q->where('lng', $lng))
+                            ->when($name !== '', fn($q) => $q->where('name', $name))
+                            ->when($lat !== '', fn($q) => $q->where('lat', $lat))
+                            ->when($lng !== '', fn($q) => $q->where('lng', $lng))
                             ->first();
 
                         if ($existing) {
@@ -191,15 +191,15 @@ class DoctorForm
                             ->disk('public')
                             ->directory('hospitals'),
                     ])
-                    ->createOptionAction(fn ($action) => $action
-                        ->visible(fn () => Auth::user()?->isAdmin())
+                    ->createOptionAction(fn($action) => $action
+                        ->visible(fn() => Auth::user()?->isAdmin())
                         ->modalHeading('إضافة مستشفى')
                         ->modalSubmitActionLabel('حفظ'))
                     ->createOptionUsing(function (array $data): int {
                         $email = trim((string) ($data['email'] ?? ''));
 
                         $existing = Hospital::query()
-                            ->when($email !== '', fn ($q) => $q->where('email', $email))
+                            ->when($email !== '', fn($q) => $q->where('email', $email))
                             ->first();
 
                         if ($existing) {
@@ -219,6 +219,16 @@ class DoctorForm
                 Textarea::make('services')
                     ->label('الخدمات')
                     ->columnSpanFull(),
+
+                TextInput::make('price')
+                    ->label('السعر')
+                    ->numeric()
+                    ->columnSpan(1),
+
+                TextInput::make('experience')
+                    ->label('الخبرة')
+                    ->numeric()
+                    ->columnSpan(1),
 
                 Toggle::make('is_featured')
                     ->label('مميز')

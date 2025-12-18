@@ -66,6 +66,17 @@ class DoctorsTable
                     ->boolean()
                     ->toggleable(),
 
+
+                TextColumn::make('price')
+                    ->label('السعر')
+                    ->toggleable()
+                    ->sortable(),
+
+                TextColumn::make('experience')
+                    ->label(label: 'الخبرة')
+                    ->toggleable()
+                    ->sortable(),
+
                 ImageColumn::make('user.profile_image')
                     ->label('الصورة')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -99,7 +110,7 @@ class DoctorsTable
                         $gender = $data['value'] ?? null;
 
                         return $gender
-                            ? $query->whereHas('user', fn (Builder $q) => $q->where('gender', $gender))
+                            ? $query->whereHas('user', fn(Builder $q) => $q->where('gender', $gender))
                             : $query;
                     }),
 
@@ -119,12 +130,12 @@ class DoctorsTable
             ])
             ->recordActions([
                 EditAction::make()
-                    ->visible(fn ($record): bool => auth()->user()?->can('update', $record) ?? false),
+                    ->visible(fn($record): bool => auth()->user()?->can('update', $record) ?? false),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                        ->visible(fn (): bool => auth()->user()?->can('deleteAny', \App\Models\Doctor::class) ?? false),
+                        ->visible(fn(): bool => auth()->user()?->can('deleteAny', \App\Models\Doctor::class) ?? false),
                 ]),
             ]);
     }
