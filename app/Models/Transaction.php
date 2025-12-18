@@ -10,7 +10,6 @@ class Transaction extends Model
     
     protected $fillable = [
         'user_id',
-        'payment_method_id',
         'payment_gateway_detail_id',
         'amount',
         'status',
@@ -19,5 +18,10 @@ class Transaction extends Model
     public function paymentGatewayDetail()
     {
         return $this->belongsTo(PaymentGatewayDetail::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

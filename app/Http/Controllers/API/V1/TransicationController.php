@@ -10,32 +10,29 @@ use Illuminate\Support\Facades\Auth;
 
 class TransicationController extends Controller
 {
-     public function createTranscation(Request $request)
+    public function createTranscation(Request $request)
     {
-        
-        $user = $request->user();
-    if (!$user) {
-        return response()->json([
-        'status' => 'error',
-        'message' => 'Unauthenticated. Make sure to send Bearer token.'
-    ], 401);
-}
+
+        $user = auth()->user()->id;
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthenticated. Make sure to send Bearer token.'
+            ], 401);
+        }
 
 
-       
+
         $request->validate([
-
-            'payment_method_id' => 'required|exists:payment_methods,id',
             'amount' => 'required|numeric|min:0.01',
-            
+
         ]);
 
-       
+
         $transaction = Transaction::create([
-            'user_id' => $user->id,
-            'payment_method_id' => $request->payment_method_id,
+            'user_id' => $user,
             'amount' => $request->amount,
-            'status' => 'pending' 
+            'status' => 'pending'
         ]);
 
         return response()->json([
@@ -45,7 +42,7 @@ class TransicationController extends Controller
         ]);
     }
 
-    
+
     public function deleteTranscation($id)
     {
         $transaction = Transaction::find($id);

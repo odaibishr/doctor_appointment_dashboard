@@ -11,5 +11,13 @@ class CreateTransaction extends CreateRecord
     use RedirectsToIndex;
 
     protected static string $resource = TransactionResource::class;
-}
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['user_id'] ??= auth()->id();
+
+        abort_unless((bool) $data['user_id'], 403);
+
+        return $data;
+    }
+}

@@ -17,6 +17,16 @@ class TransactionForm
         return $schema
             ->columns(2)
             ->components([
+                Select::make('user_id')
+                    ->label('User')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->default(fn () => auth()->id())
+                    ->required(fn () => Auth::user()?->isAdmin())
+                    ->visible(fn () => Auth::user()?->isAdmin()),
+
+
                 TextInput::make('amount')
                     ->label('المبلغ')
                     ->required()
