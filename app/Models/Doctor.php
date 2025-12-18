@@ -27,6 +27,8 @@ class Doctor extends Model
         'services',
         'hospital_id',
         'birthday',
+        'price',
+        'experience',
     ];
 
     protected $appends = [
@@ -38,6 +40,8 @@ class Doctor extends Model
         'profile_image',
         'location_id',
         'birth_day',
+        'price',
+        'experience',
     ];
 
     public function getProfileImageUrlAttribute(): ?string
