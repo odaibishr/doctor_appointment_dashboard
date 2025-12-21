@@ -16,10 +16,37 @@ class PatientForm
     {
         return $schema
             ->components([
+                TextInput::make('name')
+                    ->label('Name')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpan(1),
+
+                TextInput::make('email')
+                    ->label('Email')
+                    ->email()
+                    ->unique(ignoreRecord: true)
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpan(1),
+
+                TextInput::make('password')
+                    ->label('Password')
+                    ->password()
+                    ->required(fn (string $operation): bool => $operation === 'create')
+                    ->dehydrated(fn ($state): bool => filled($state))
+                    ->maxLength(255)
+                    ->columnSpan(1),
+
                 TextInput::make('phone')
                     ->label('رقم الهاتف')
                     ->tel()
                     ->required()
+                    ->columnSpan(1),
+
+                TextInput::make('address')
+                    ->label('Address')
+                    ->maxLength(255)
                     ->columnSpan(1),
 
                 Select::make('gender')

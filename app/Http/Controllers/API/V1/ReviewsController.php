@@ -14,14 +14,14 @@ class ReviewsController extends Controller
     {
 
         $userId = Auth::id();
-        
-        $validateData=$request->validate([
-            'doctor_id'=>'required|exists:doctors,id',
-            'rating'=>'nullable|integer|min:1|max:5',
-            'comment'=>'required|string',
+
+        $validateData = $request->validate([
+            'doctor_id' => 'required|exists:doctors,id',
+            'rating' => 'nullable|integer|min:1|max:5',
+            'comment' => 'required|string',
         ]);
 
-        $rewiew=Review::create($validateData+['user_id'=>Auth::id()]);
+        $rewiew = Review::create($validateData + ['user_id' => Auth::id()]);
         return response()->json([
             'message' => 'Review created successfully.'
         ]);
@@ -46,12 +46,11 @@ class ReviewsController extends Controller
     public function getReviewByDoctor($doctorId)
     {
         $reviews = Review::where('doctor_id', $doctorId)
-            ->with('user:id,name') 
+            ->with('user')
             ->get();
-            
+        $reviewsAvg = Review::where('doctor_id', $doctorId)->avg('rating');
+
         return response()->json([
-            'doctor_id' => $doctorId,
-            'count' => $reviews->count(),
             'reviews' => $reviews,
         ]);
     }

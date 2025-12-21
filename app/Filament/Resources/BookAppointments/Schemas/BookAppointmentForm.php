@@ -4,9 +4,12 @@ namespace App\Filament\Resources\BookAppointments\Schemas;
 
 use App\Models\Doctor;
 use App\Models\Day;
+use App\Models\DoctorSchedule;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,8 +27,11 @@ class BookAppointmentForm
                         ->pluck('users.name', 'doctors.id')
                         ->all())
                     ->required()
+                    ->default(fn() => Auth::user()?->doctor?->id)
                     ->disabled(fn(string $operation) => !Auth::user()?->isAdmin() && $operation === 'edit')
                     ->hidden(fn() => Auth::user()?->isDoctor())
+                    ->live()
+                    ->afterStateUpdated(fn(Set $set) => $set('doctor_schedule_id', null))
                     ->columnSpan(2),
 
                 Select::make('user_id')
@@ -39,9 +45,26 @@ class BookAppointmentForm
 
                 Select::make('doctor_schedule_id')
                     ->label('جدول الطبيب')
-                    ->relationship('schedule', 'day_id', )
-                    ->getOptionLabelUsing(fn($value) => Day::query()->where('id', $value)->value('day_name'))
+                    ->options(function (Get $get): array {
+                        $doctorId = $get('doctor_id');
+
+                        if (! $doctorId) {
+                            return [];
+                        }
+
+                        return DoctorSchedule::query()
+                            ->with('day')
+                            ->where('doctor_id', $doctorId)
+                            ->orderBy('day_id')
+                            ->get()
+                            ->mapWithKeys(fn($schedule) => [
+                                $schedule->id => $schedule->day?->day_name
+                                    ?? Day::query()->where('id', $schedule->day_id)->value('day_name'),
+                            ])
+                            ->all();
+                    })
                     ->required()
+                    ->live()
                     ->columnSpan(2),
 
                 DatePicker::make('date')

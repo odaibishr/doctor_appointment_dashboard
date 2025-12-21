@@ -29,8 +29,9 @@ class BookAppointmentsTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('schedule.day.name')
+                TextColumn::make('schedule.day.day_name')
                     ->label('اليوم')
+                
                     ->sortable(),
 
                 TextColumn::make('date')

@@ -103,7 +103,7 @@ class DoctorController extends Controller
                 'email' => $validated['email'] ?? null,
                 'phone' => $validated['phone'] ?? null,
                 'gender' => $validated['gender'] ?? null,
-            ], fn ($v) => $v !== null));
+            ], fn($v) => $v !== null));
         }
 
         $doctor->update(array_filter([
@@ -111,7 +111,7 @@ class DoctorController extends Controller
             'specialty_id' => $validated['specialty_id'] ?? null,
             'hospital_id' => $validated['hospital_id'] ?? null,
             'services' => $validated['services'] ?? null,
-        ], fn ($v) => $v !== null));
+        ], fn($v) => $v !== null));
 
         return response()->json([
             'message' => 'Doctor updated successfully',
@@ -130,7 +130,7 @@ class DoctorController extends Controller
     {
         $userId = auth()->id();
 
-        $doctors = Doctor::with(['user.location', 'specialty', 'hospital'])
+        $doctors = Doctor::with(['user', 'specialty', 'hospital'])
             ->withCount([
                 'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
                     $query->where('user_id', $userId);
@@ -151,7 +151,7 @@ class DoctorController extends Controller
         $specialtyId = $request->input('specialty_id');
 
         $doctors = Doctor::query()
-            ->with(['user.location', 'specialty', 'hospital'])
+            ->with(['user', 'specialty', 'hospital'])
             ->withCount([
                 'favoriteDoctors as is_favorite' => function ($q) use ($userId) {
                     $q->where('user_id', $userId);
@@ -188,7 +188,7 @@ class DoctorController extends Controller
         $userId = auth()->id();
 
         $doctor = Doctor::query()
-            ->with(['user.location', 'specialty', 'hospital', 'schedules.day', 'daysOff.day'])
+            ->with(['user', 'specialty', 'hospital', 'schedules.day', 'daysOff.day'])
             ->withCount([
                 'favoriteDoctors as is_favorite' => function ($query) use ($userId) {
                     $query->where('user_id', $userId);
