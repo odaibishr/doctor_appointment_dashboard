@@ -50,7 +50,7 @@ class AppointmentStatusChart extends ChartWidget
 
         return Cache::remember($cacheKey, now()->addMinutes(2), function () use ($range) {
             $counts = $this->getScopedAppointmentsQuery()
-                ->whereBetween('date', [$range['start']->toDateString(), $range['end']->toDateString()])
+                ->whereRaw('DATE(date) BETWEEN ? AND ?', [$range['start']->toDateString(), $range['end']->toDateString()])
                 ->selectRaw('status, count(*) as aggregate')
                 ->groupBy('status')
                 ->pluck('aggregate', 'status')

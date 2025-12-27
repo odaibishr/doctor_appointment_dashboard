@@ -53,8 +53,8 @@ class TopDoctorsChart extends ChartWidget
         return Cache::remember($cacheKey, now()->addMinutes(2), function () use ($range) {
             $rows = Doctor::query()
                 ->withCount([
-                    'appointments as appointments_count' => fn ($query) => $query->whereBetween(
-                        'date',
+                    'appointments as appointments_count' => fn ($query) => $query->whereRaw(
+                        'DATE(date) BETWEEN ? AND ?',
                         [$range['start']->toDateString(), $range['end']->toDateString()],
                     ),
                 ])

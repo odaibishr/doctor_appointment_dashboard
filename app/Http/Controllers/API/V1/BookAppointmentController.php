@@ -17,7 +17,9 @@ class BookAppointmentController extends Controller
             'doctor_schedule_id' => 'nullable|exists:doctor_schedules,id',
             'date' => 'required|date',
             'payment_mode' => 'required|in:cash,online',
-            'status' => 'in:pending,confirmed,cancelled'
+            'status' => 'in:pending,confirmed,cancelled',
+            'is_completed' => 'boolean',
+            'transaction_id' => 'nullable|exists:transactions,id',
         ]);
 
         $userId = Auth::id();

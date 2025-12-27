@@ -50,11 +50,11 @@ class AppointmentsTrendChart extends ChartWidget
 
         return Cache::remember($cacheKey, now()->addMinutes(2), function () use ($range) {
             $countsByDate = $this->getScopedAppointmentsQuery()
-                ->whereBetween('date', [$range['start']->toDateString(), $range['end']->toDateString()])
-                ->selectRaw('date, count(*) as aggregate')
-                ->groupBy('date')
-                ->orderBy('date')
-                ->pluck('aggregate', 'date')
+                ->whereRaw('DATE(date) BETWEEN ? AND ?', [$range['start']->toDateString(), $range['end']->toDateString()])
+                ->selectRaw('DATE(date) as date_key, count(*) as aggregate')
+                ->groupBy('date_key')
+                ->orderBy('date_key')
+                ->pluck('aggregate', 'date_key')
                 ->map(fn ($value) => (int) $value)
                 ->all();
 
