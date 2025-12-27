@@ -1,5 +1,8 @@
 @import "../../../../vendor/filament/filament/resources/css/theme.css";
 
+/* ============================================
+   RTL Support
+   ============================================ */
 html[dir="rtl"] {
     direction: rtl;
 }
@@ -27,4 +30,477 @@ html[dir="rtl"] .fi-fo-text-input input[type="number"],
 html[dir="rtl"] .fi-fo-text-input input[type="url"] {
     direction: ltr;
     text-align: left;
+}
+
+/* ============================================
+   Animation Keyframes
+   ============================================ */
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Slide In from Right (for RTL) */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide In from Left */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Pulse Animation for Icons */
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* ============================================
+   Global Transitions
+   ============================================ */
+
+/* Smooth transitions for all interactive elements */
+*,
+*::before,
+*::after {
+    transition-property: background-color, border-color, color, fill, stroke,
+        opacity, box-shadow, transform;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   Sidebar Hover Effects (No entrance animations)
+   ============================================ */
+
+/* Sidebar hover effects */
+.fi-sidebar-item-button {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fi-sidebar-item-button:hover {
+    transform: translateX(-4px);
+    background-color: rgba(var(--primary-500), 0.08) !important;
+}
+
+html[dir="rtl"] .fi-sidebar-item-button:hover {
+    transform: translateX(4px);
+}
+
+/* Sidebar icons animation */
+.fi-sidebar-item-icon {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.fi-sidebar-item-button:hover .fi-sidebar-item-icon {
+    transform: scale(1.15);
+}
+
+/* Active sidebar item subtle highlight */
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    position: relative;
+}
+
+.fi-sidebar-item-active .fi-sidebar-item-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0.1;
+    background: linear-gradient(
+        135deg,
+        rgba(var(--primary-500), 0.3),
+        transparent
+    );
+}
+
+/* ============================================
+   Widget & Card Animations
+   ============================================ */
+
+/* Stats widgets */
+.fi-wi-stats-overview-stat {
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.fi-wi-stats-overview-stat:nth-child(1) {
+    animation-delay: 0.1s;
+}
+.fi-wi-stats-overview-stat:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.fi-wi-stats-overview-stat:nth-child(3) {
+    animation-delay: 0.3s;
+}
+.fi-wi-stats-overview-stat:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* Stats card hover effect */
+.fi-wi-stats-overview-stat {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Chart widgets */
+.fi-wi-chart {
+    animation: scaleIn 0.5s ease-out backwards;
+    animation-delay: 0.3s;
+}
+
+.fi-wi-chart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Section cards */
+.fi-section {
+    animation: fadeInUp 0.4s ease-out backwards;
+}
+
+/* ============================================
+   Table Animations
+   ============================================ */
+
+/* Table rows */
+.fi-ta-row {
+    animation: fadeIn 0.3s ease-out backwards;
+}
+
+/* Staggered animation for table rows */
+.fi-ta-row:nth-child(1) {
+    animation-delay: 0.05s;
+}
+.fi-ta-row:nth-child(2) {
+    animation-delay: 0.1s;
+}
+.fi-ta-row:nth-child(3) {
+    animation-delay: 0.15s;
+}
+.fi-ta-row:nth-child(4) {
+    animation-delay: 0.2s;
+}
+.fi-ta-row:nth-child(5) {
+    animation-delay: 0.25s;
+}
+.fi-ta-row:nth-child(6) {
+    animation-delay: 0.3s;
+}
+.fi-ta-row:nth-child(7) {
+    animation-delay: 0.35s;
+}
+.fi-ta-row:nth-child(8) {
+    animation-delay: 0.4s;
+}
+.fi-ta-row:nth-child(9) {
+    animation-delay: 0.45s;
+}
+.fi-ta-row:nth-child(10) {
+    animation-delay: 0.5s;
+}
+
+/* Table row hover */
+.fi-ta-row {
+    transition: all 0.2s ease !important;
+}
+
+.fi-ta-row:hover {
+    background-color: rgba(var(--primary-500), 0.04) !important;
+}
+
+/* ============================================
+   Button Animations
+   ============================================ */
+
+/* All buttons */
+.fi-btn {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.fi-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--primary-500), 0.25) !important;
+}
+
+.fi-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(var(--primary-500), 0.2) !important;
+}
+
+/* Button ripple effect */
+.fi-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.3) 0%,
+        transparent 60%
+    );
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.3s;
+}
+
+.fi-btn:active::after {
+    transform: scale(2.5);
+    opacity: 1;
+    transition: transform 0s, opacity 0s;
+}
+
+/* Icon buttons */
+.fi-icon-btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fi-icon-btn:hover {
+    transform: scale(1.1);
+}
+
+.fi-icon-btn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================
+   Form Input Animations
+   ============================================ */
+
+/* Input focus effect */
+.fi-fo-text-input input,
+.fi-fo-textarea textarea,
+.fi-fo-select select {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fi-fo-text-input input:focus,
+.fi-fo-textarea textarea:focus,
+.fi-fo-select select:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--primary-500), 0.15) !important;
+}
+
+/* ============================================
+   Modal & Dialog Animations
+   ============================================ */
+
+/* Modal backdrop */
+.fi-modal {
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* Modal content */
+.fi-modal-window {
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================
+   Notification Animations
+   ============================================ */
+
+.fi-notification {
+    animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[dir="rtl"] .fi-notification {
+    animation: slideInLeft 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================
+   Badge & Indicator Animations
+   ============================================ */
+
+.fi-badge {
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Status indicators pulse */
+.fi-badge[style*="background-color"]:not([style*="transparent"]) {
+    position: relative;
+}
+
+/* ============================================
+   Loading States
+   ============================================ */
+
+/* Skeleton loading shimmer */
+.fi-loading {
+    background: linear-gradient(
+        90deg,
+        rgba(var(--gray-200), 1) 0%,
+        rgba(var(--gray-100), 1) 50%,
+        rgba(var(--gray-200), 1) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* ============================================
+   Page Transitions
+   ============================================ */
+
+/* Main content area */
+.fi-main {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Page header */
+.fi-header {
+    animation: fadeInUp 0.4s ease-out backwards;
+    animation-delay: 0.1s;
+}
+
+/* ============================================
+   Dropdown Animations
+   ============================================ */
+
+.fi-dropdown-panel {
+    animation: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: top center;
+}
+
+html[dir="rtl"] .fi-dropdown-panel {
+    transform-origin: top right;
+}
+
+/* ============================================
+   Tab Animations
+   ============================================ */
+
+.fi-tabs-tab {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fi-tabs-tab:hover {
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Breadcrumb Animations
+   ============================================ */
+
+.fi-breadcrumbs-item {
+    animation: fadeIn 0.3s ease-out backwards;
+}
+
+.fi-breadcrumbs-item:nth-child(1) {
+    animation-delay: 0s;
+}
+.fi-breadcrumbs-item:nth-child(2) {
+    animation-delay: 0.1s;
+}
+.fi-breadcrumbs-item:nth-child(3) {
+    animation-delay: 0.2s;
+}
+.fi-breadcrumbs-item:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+/* ============================================
+   Accessibility - Reduce Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================
+   Custom Scrollbar (for a polished look)
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(var(--gray-100), 1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--gray-400), 1);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--gray-500), 1);
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--gray-400), 1) rgba(var(--gray-100), 1);
 }
