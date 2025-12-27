@@ -25,7 +25,7 @@ class SpecialtyResource extends Resource
 
     protected static ?string $navigationLabel = 'التخصصات';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
     protected static ?string $recordTitleAttribute = 'name';
 

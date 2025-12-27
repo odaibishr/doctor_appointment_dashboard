@@ -26,7 +26,7 @@ class FavoriteDoctorResource extends Resource
 
     protected static ?string $navigationLabel = 'الأطباء المفضلون';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
     protected static ?string $recordTitleAttribute = 'id';
 

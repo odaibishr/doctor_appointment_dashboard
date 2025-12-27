@@ -25,7 +25,7 @@ class LocationResource extends Resource
 
     protected static ?string $navigationLabel = 'المواقع';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
     protected static ?string $recordTitleAttribute = 'name';
 

@@ -25,7 +25,7 @@ class DayResource extends Resource
 
     protected static ?string $navigationLabel = 'الأيام';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendar;
 
     protected static ?string $recordTitleAttribute = 'day_name';
 

@@ -25,7 +25,7 @@ class HospitalResource extends Resource
 
     protected static ?string $navigationLabel = 'المستشفيات';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
     protected static ?string $recordTitleAttribute = 'name';
 

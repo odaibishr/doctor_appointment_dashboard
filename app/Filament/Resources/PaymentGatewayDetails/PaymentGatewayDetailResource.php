@@ -25,7 +25,7 @@ class PaymentGatewayDetailResource extends Resource
 
     protected static ?string $navigationLabel = 'بوابات الدفع';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
     protected static ?string $recordTitleAttribute = 'gateway_name';
 

@@ -26,7 +26,7 @@ class BookAppointmentResource extends Resource
 
     protected static ?string $navigationLabel = 'حجوزات المواعيد';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
     protected static ?string $recordTitleAttribute = 'date';
 

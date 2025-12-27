@@ -26,7 +26,7 @@ class DoctorDaysOffResource extends Resource
 
     protected static ?string $navigationLabel = 'أيام الإجازة للأطباء';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNoSymbol;
 
     protected static ?string $recordTitleAttribute = 'id';
 

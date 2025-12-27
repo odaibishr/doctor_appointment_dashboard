@@ -26,7 +26,7 @@ class NotificationResource extends Resource
 
     protected static ?string $navigationLabel = 'الإشعارات';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBell;
 
     protected static ?string $recordTitleAttribute = 'title';
 
