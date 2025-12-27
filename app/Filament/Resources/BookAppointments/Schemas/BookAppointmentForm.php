@@ -4,6 +4,7 @@ namespace App\Filament\Resources\BookAppointments\Schemas;
 
 use App\Models\Doctor;
 use App\Models\Day;
+use App\Models\DoctorDaysOff;
 use App\Models\DoctorSchedule;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -12,9 +13,28 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class BookAppointmentForm
 {
+    /**
+     * Map Arabic day names to PHP Carbon day numbers (0=Sunday, 6=Saturday)
+     */
+    private static function getPhpDayNumberFromArabicName(string $arabicDay): ?int
+    {
+        $mapping = [
+            'الأحد' => 0,      // Sunday
+            'الاثنين' => 1,    // Monday
+            'الثلاثاء' => 2,   // Tuesday
+            'الأربعاء' => 3,   // Wednesday
+            'الخميس' => 4,     // Thursday
+            'الجمعة' => 5,     // Friday
+            'السبت' => 6,      // Saturday
+        ];
+
+        return $mapping[$arabicDay] ?? null;
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
@@ -31,7 +51,10 @@ class BookAppointmentForm
                     ->disabled(fn(string $operation) => !Auth::user()?->isAdmin() && $operation === 'edit')
                     ->hidden(fn() => Auth::user()?->isDoctor())
                     ->live()
-                    ->afterStateUpdated(fn(Set $set) => $set('doctor_schedule_id', null))
+                    ->afterStateUpdated(function (Set $set) {
+                        $set('doctor_schedule_id', null);
+                        $set('date', null);
+                    })
                     ->columnSpan(2),
 
                 Select::make('user_id')
@@ -44,7 +67,7 @@ class BookAppointmentForm
                     ->columnSpan(2),
 
                 Select::make('doctor_schedule_id')
-                    ->label('جدول الطبيب')
+                    ->label('جدول الطبيب (اليوم)')
                     ->options(function (Get $get): array {
                         $doctorId = $get('doctor_id');
 
@@ -52,24 +75,93 @@ class BookAppointmentForm
                             return [];
                         }
 
+                        // Get days off for this doctor
+                        $daysOff = DoctorDaysOff::where('doctor_id', $doctorId)
+                            ->pluck('day_id')
+                            ->toArray();
+
                         return DoctorSchedule::query()
                             ->with('day')
                             ->where('doctor_id', $doctorId)
+                            ->whereNotIn('day_id', $daysOff) // Exclude days off
                             ->orderBy('day_id')
                             ->get()
                             ->mapWithKeys(fn($schedule) => [
-                                $schedule->id => $schedule->day?->day_name
-                                    ?? Day::query()->where('id', $schedule->day_id)->value('day_name'),
+                                $schedule->id => ($schedule->day?->day_name ?? Day::query()->where('id', $schedule->day_id)->value('day_name'))
+                                    . ' (' . substr($schedule->start_time, 0, 5) . ' - ' . substr($schedule->end_time, 0, 5) . ')',
                             ])
                             ->all();
                     })
                     ->required()
                     ->live()
+                    ->afterStateUpdated(fn(Set $set) => $set('date', null))
+                    ->helperText('اختر اليوم المناسب من جدول الطبيب')
                     ->columnSpan(2),
 
                 DatePicker::make('date')
                     ->label('تاريخ الموعد')
                     ->required()
+                    ->minDate(now()->toDateString())
+                    ->maxDate(now()->addMonths(6)->toDateString())
+                    ->disabledDates(function (Get $get): array {
+                        $scheduleId = $get('doctor_schedule_id');
+
+                        if (!$scheduleId) {
+                            // If no schedule selected, disable all dates
+                            $disabledDates = [];
+                            $date = now();
+                            for ($i = 0; $i < 180; $i++) {
+                                $disabledDates[] = $date->copy()->addDays($i)->format('Y-m-d');
+                            }
+                            return $disabledDates;
+                        }
+
+                        // Get the schedule's day
+                        $schedule = DoctorSchedule::with('day')->find($scheduleId);
+                        if (!$schedule || !$schedule->day) {
+                            return [];
+                        }
+
+                        // Get the day name and convert to PHP day number
+                        $dayName = $schedule->day->day_name;
+                        $allowedPhpDayNumber = self::getPhpDayNumberFromArabicName($dayName);
+
+                        if ($allowedPhpDayNumber === null) {
+                            return [];
+                        }
+
+                        // Generate list of DISABLED dates (all dates that DON'T match the selected day)
+                        $disabledDates = [];
+                        $startDate = now();
+                        
+                        // Check next 180 days (6 months)
+                        for ($i = 0; $i < 180; $i++) {
+                            $currentDate = $startDate->copy()->addDays($i);
+                            $currentDayOfWeek = (int) $currentDate->dayOfWeek; // 0=Sunday, 6=Saturday
+                            
+                            // If this date's day of week doesn't match the allowed day, disable it
+                            if ($currentDayOfWeek !== $allowedPhpDayNumber) {
+                                $disabledDates[] = $currentDate->format('Y-m-d');
+                            }
+                        }
+
+                        return $disabledDates;
+                    })
+                    ->helperText(function (Get $get): string {
+                        $scheduleId = $get('doctor_schedule_id');
+                        if (!$scheduleId) {
+                            return '⚠️ اختر جدول الطبيب أولاً لتحديد الأيام المتاحة';
+                        }
+
+                        $schedule = DoctorSchedule::with('day')->find($scheduleId);
+                        if (!$schedule || !$schedule->day) {
+                            return '';
+                        }
+
+                        return '✅ يمكنك فقط اختيار أيام ' . $schedule->day->day_name;
+                    })
+                    ->native(false) // Use Filament's date picker for better control
+                    ->displayFormat('Y-m-d')
                     ->columnSpan(2),
 
                 Select::make('status')
