@@ -11,6 +11,7 @@ use App\Models\Review;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class ReviewResource extends Resource
     protected static ?string $pluralModelLabel = 'المراجعات';
 
     protected static ?string $navigationLabel = 'المراجعات';
+
+    protected static UnitEnum|string|null $navigationGroup = 'المالية';
+
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
 
@@ -82,3 +87,4 @@ class ReviewResource extends Resource
         ];
     }
 }
+

@@ -11,6 +11,7 @@ use App\Models\DoctorSchedule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class DoctorScheduleResource extends Resource
     protected static ?string $pluralModelLabel = 'جداول الأطباء';
 
     protected static ?string $navigationLabel = 'جداول الأطباء';
+
+    protected static UnitEnum|string|null $navigationGroup = 'إدارة المواعيد';
+
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
@@ -78,3 +83,4 @@ class DoctorScheduleResource extends Resource
         ];
     }
 }
+

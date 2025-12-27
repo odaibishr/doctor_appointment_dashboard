@@ -11,6 +11,7 @@ use App\Models\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class NotificationResource extends Resource
     protected static ?string $pluralModelLabel = 'الإشعارات';
 
     protected static ?string $navigationLabel = 'الإشعارات';
+
+    protected static UnitEnum|string|null $navigationGroup = 'المستخدمين';
+
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBell;
 
@@ -76,3 +81,4 @@ class NotificationResource extends Resource
         ];
     }
 }
+

@@ -10,6 +10,7 @@ use App\Filament\Resources\Hospitals\Tables\HospitalsTable;
 use App\Models\Hospital;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -24,6 +25,10 @@ class HospitalResource extends Resource
     protected static ?string $pluralModelLabel = 'المستشفيات';
 
     protected static ?string $navigationLabel = 'المستشفيات';
+
+    protected static UnitEnum|string|null $navigationGroup = 'الكوادر الطبية';
+
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
@@ -60,3 +65,4 @@ class HospitalResource extends Resource
         ];
     }
 }
+

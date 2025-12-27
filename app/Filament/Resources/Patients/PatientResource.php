@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class PatientResource extends Resource
     protected static ?string $pluralModelLabel = 'المرضى';
 
     protected static ?string $navigationLabel = 'المرضى';
+
+    protected static UnitEnum|string|null $navigationGroup = 'المستخدمين';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
@@ -78,3 +83,4 @@ class PatientResource extends Resource
         ];
     }
 }
+

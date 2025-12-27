@@ -41,15 +41,52 @@ class BookAppointmentsTable
 
                 TextColumn::make('status')
                     ->label('الحالة')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending' => 'قيد الانتظار',
+                        'confirmed' => 'مؤكد',
+                        'cancelled' => 'ملغى',
+                        default => $state,
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'confirmed' => 'success',
+                        'cancelled' => 'danger',
+                        default => 'warning',
+                    })
+                    ->icon(fn (string $state): string => match ($state) {
+                        'confirmed' => 'heroicon-m-check-circle',
+                        'cancelled' => 'heroicon-m-x-circle',
+                        default => 'heroicon-m-clock',
+                    })
                     ->searchable()
                     ->sortable(),
 
                 IconColumn::make('is_completed')
                     ->label('مكتمل')
-                    ->boolean(),
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-badge')
+                    ->falseIcon('heroicon-o-x-mark')
+                    ->trueColor('success')
+                    ->falseColor('gray'),
 
                 TextColumn::make('payment_mode')
                     ->label('طريقة الدفع')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'online' => 'أونلاين',
+                        'cash' => 'نقدي',
+                        default => $state,
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'online' => 'info',
+                        'cash' => 'success',
+                        default => 'gray',
+                    })
+                    ->icon(fn (string $state): string => match ($state) {
+                        'online' => 'heroicon-m-credit-card',
+                        'cash' => 'heroicon-m-banknotes',
+                        default => 'heroicon-m-currency-dollar',
+                    })
                     ->searchable(),
 
                 TextColumn::make('transaction_id')

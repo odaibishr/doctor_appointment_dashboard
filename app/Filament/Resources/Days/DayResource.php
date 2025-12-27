@@ -10,6 +10,7 @@ use App\Filament\Resources\Days\Tables\DaysTable;
 use App\Models\Day;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -24,6 +25,10 @@ class DayResource extends Resource
     protected static ?string $pluralModelLabel = 'الأيام';
 
     protected static ?string $navigationLabel = 'الأيام';
+
+    protected static UnitEnum|string|null $navigationGroup = 'الإعدادات';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendar;
 
@@ -60,3 +65,4 @@ class DayResource extends Resource
         ];
     }
 }
+

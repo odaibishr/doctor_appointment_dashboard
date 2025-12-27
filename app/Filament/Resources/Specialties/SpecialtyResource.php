@@ -10,6 +10,7 @@ use App\Filament\Resources\Specialties\Tables\SpecialtiesTable;
 use App\Models\Specialty;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -24,6 +25,10 @@ class SpecialtyResource extends Resource
     protected static ?string $pluralModelLabel = 'التخصصات';
 
     protected static ?string $navigationLabel = 'التخصصات';
+
+    protected static UnitEnum|string|null $navigationGroup = 'الكوادر الطبية';
+
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
@@ -60,3 +65,4 @@ class SpecialtyResource extends Resource
         ];
     }
 }
+

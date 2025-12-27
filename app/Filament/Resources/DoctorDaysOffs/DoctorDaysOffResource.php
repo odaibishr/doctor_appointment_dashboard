@@ -11,6 +11,7 @@ use App\Models\DoctorDaysOff;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class DoctorDaysOffResource extends Resource
     protected static ?string $pluralModelLabel = 'أيام الإجازة للأطباء';
 
     protected static ?string $navigationLabel = 'أيام الإجازة للأطباء';
+
+    protected static UnitEnum|string|null $navigationGroup = 'إدارة المواعيد';
+
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNoSymbol;
 
@@ -78,3 +83,4 @@ class DoctorDaysOffResource extends Resource
         ];
     }
 }
+

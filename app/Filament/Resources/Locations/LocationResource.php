@@ -10,6 +10,7 @@ use App\Filament\Resources\Locations\Tables\LocationsTable;
 use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -24,6 +25,10 @@ class LocationResource extends Resource
     protected static ?string $pluralModelLabel = 'المواقع';
 
     protected static ?string $navigationLabel = 'المواقع';
+
+    protected static UnitEnum|string|null $navigationGroup = 'الإعدادات';
+
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
@@ -60,3 +65,4 @@ class LocationResource extends Resource
         ];
     }
 }
+

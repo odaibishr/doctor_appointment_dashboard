@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class TransactionResource extends Resource
     protected static ?string $pluralModelLabel = 'المعاملات';
 
     protected static ?string $navigationLabel = 'المعاملات';
+
+    protected static UnitEnum|string|null $navigationGroup = 'المالية';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBanknotes;
 
@@ -76,3 +81,4 @@ class TransactionResource extends Resource
         ];
     }
 }
+

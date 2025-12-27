@@ -11,6 +11,7 @@ use App\Models\FavoriteDoctor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class FavoriteDoctorResource extends Resource
     protected static ?string $pluralModelLabel = 'الأطباء المفضلون';
 
     protected static ?string $navigationLabel = 'الأطباء المفضلون';
+
+    protected static UnitEnum|string|null $navigationGroup = 'المستخدمين';
+
+    protected static ?int $navigationSort = 2;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
@@ -76,3 +81,4 @@ class FavoriteDoctorResource extends Resource
         ];
     }
 }
+

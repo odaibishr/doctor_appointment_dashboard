@@ -11,6 +11,7 @@ use App\Models\BookAppointment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -25,6 +26,10 @@ class BookAppointmentResource extends Resource
     protected static ?string $pluralModelLabel = 'حجوزات المواعيد';
 
     protected static ?string $navigationLabel = 'حجوزات المواعيد';
+
+    protected static UnitEnum|string|null $navigationGroup = 'إدارة المواعيد';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
@@ -82,3 +87,4 @@ class BookAppointmentResource extends Resource
         ];
     }
 }
+
