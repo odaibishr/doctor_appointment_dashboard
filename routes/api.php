@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AiDoctorController;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Controllers\API\V1\BookAppointmentController;
 use App\Http\Controllers\API\V1\DayController;
@@ -30,6 +31,10 @@ Route::prefix('v1')->group(function () {
                 Route::put('update/{id}', 'update');
                 Route::delete('delete/{id}', 'delete');
             });
+             Route::prefix('ai')->controller(AiDoctorController::class)->group(function () {
+                Route::post('ask', 'ask');
+            });
+           // Route::post('/ai/doctor/ask', [AiDoctorController::class, 'ask']);
             Route::middleware('auth:sanctum')->group(function () {
                 Route::get('me', 'me');
                 Route::post('logout', 'logout');
@@ -110,4 +115,8 @@ Route::prefix('v1')->group(function () {
 
         }
     );
+    
+
+
+
 });
