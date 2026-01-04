@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\FavoriteDoctor;
+use App\Models\Specialty;
 
 class DoctorController extends Controller
 {
@@ -200,5 +201,43 @@ class DoctorController extends Controller
             'data' => $doctor,
         ], 200);
     }
+
+
+public function getDoctorsBySpecialtyName(Request $request)
+{
+    $specialtyName = trim($request->query('specialty_name'));
+    $userId = auth()->id();
+
+    if (!$specialtyName) {
+        return response()->json([
+            'message' => 'specialty_name is required'
+        ], 422);
+    }
+
+    $doctors = Doctor::with(['user', 'specialty', 'hospital'])
+        ->whereHas('specialty', function ($q) use ($specialtyName) {
+            $q->where('name', 'LIKE', "%{$specialtyName}%")
+              ->where('is_active', true);
+        })
+        ->withCount([
+            'favoriteDoctors as is_favorite' => function ($q) use ($userId) {
+                if ($userId) {
+                    $q->where('user_id', $userId);
+                }
+            }
+        ])
+        ->get();
+
+    if ($doctors->isEmpty()) {
+        return response()->json([
+            'message' => 'No doctors found for this specialty'
+        ], 404);
+    }
+
+    return response()->json([
+        'data' => $doctors
+    ], 200);
+}
+
 
 }

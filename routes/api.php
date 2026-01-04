@@ -48,6 +48,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('AllDoctors', 'AllDoctors');
                     Route::get('getSearchDoctors', 'getSearchDoctors');
                     Route::get('getDoctor/{id}', 'getDoctorById');
+                    Route::get('getDoctorsBySpecialtyName', 'getDoctorsBySpecialtyName');
                 });
 
 
