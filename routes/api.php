@@ -16,6 +16,7 @@ use App\Http\Controllers\API\V1\PaymentGatewayDetailController;
 use App\Http\Controllers\API\V1\ReviewsController;
 use App\Http\Controllers\API\V1\SpecialtyController;
 use App\Http\Controllers\API\V1\TransicationController;
+use App\Http\Controllers\API\V1\WaitlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -31,10 +32,10 @@ Route::prefix('v1')->group(function () {
                 Route::put('update/{id}', 'update');
                 Route::delete('delete/{id}', 'delete');
             });
-             Route::prefix('ai')->controller(AiDoctorController::class)->group(function () {
+            Route::prefix('ai')->controller(AiDoctorController::class)->group(function () {
                 Route::post('ask', 'ask');
             });
-           // Route::post('/ai/doctor/ask', [AiDoctorController::class, 'ask']);
+            // Route::post('/ai/doctor/ask', [AiDoctorController::class, 'ask']);
             Route::middleware('auth:sanctum')->group(function () {
                 Route::get('me', 'me');
                 Route::post('logout', 'logout');
@@ -70,20 +71,17 @@ Route::prefix('v1')->group(function () {
                     Route::post('createDay', 'createDay');
                     Route::delete('deleteDay/{id}', 'deleteDay');
                     Route::get('getDay', 'getDay');
-
                 });
-                
+
                 Route::prefix('dayOff')->controller(DoctorDaysOffController::class)->group(function () {
                     Route::post('createDayOff', 'createDayOff');
                     Route::delete('deleteDay/{id}', 'deleteDay');
-
                 });
                 Route::prefix('doctorScedule')->controller(DoctorScheduleController::class)->group(function () {
                     Route::post('createDoctorSchedule', 'createDoctorSchedule');
                     Route::put('updateDoctorSchedule/{id}', 'updateDoctorSchedule');
                     Route::get('getDoctorSchedule/{id}', 'getDoctorSchedule');
                     Route::delete('deleteDoctorSchedule/{id}', 'deleteDoctorSchedule');
-
                 });
                 Route::prefix('paymenGatwayDetail')->controller(PaymentGatewayDetailController::class)->group(function () {
                     Route::post('createGatway', 'createGatway');
@@ -104,7 +102,6 @@ Route::prefix('v1')->group(function () {
                 });
                 Route::prefix('notification')->controller(NotificationController::class)->group(function () {
                     Route::post('sendNotification', 'sendNotification');
-
                 });
                 Route::prefix('appointment')->controller(BookAppointmentController::class)->group(function () {
                     Route::post('createAppointment', 'createAppointment');
@@ -112,12 +109,18 @@ Route::prefix('v1')->group(function () {
                     Route::get('getUserAppointment', 'getUserAppointment');
                     Route::put('updateAppointmentStatus/{doctor_id}', 'updateAppointmentStatus');
                 });
-            });
 
+                // Waitlist Routes
+                Route::prefix('waitlist')->controller(WaitlistController::class)->group(function () {
+                    Route::post('join', 'join');
+                    Route::delete('leave/{id}', 'leave');
+                    Route::get('my-waitlists', 'myWaitlists');
+                    Route::get('position/{doctorId}', 'getPosition');
+                    Route::post('accept/{id}', 'acceptSlot');
+                    Route::post('decline/{id}', 'declineSlot');
+                    Route::get('check-availability/{doctorId}', 'checkDoctorAvailability');
+                });
+            });
         }
     );
-    
-
-
-
 });
