@@ -22,5 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+storage/firebase/*.json
 storage/firebase/medicalappointment.json
 
