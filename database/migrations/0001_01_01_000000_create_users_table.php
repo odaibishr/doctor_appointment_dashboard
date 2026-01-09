@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->string('gender')->nullable();
             $table->foreignId('location_id')->nullable()->constrained('locations')->nullOnDelete();
+            $table->string('fcm_token')->unique()->nullable()->default(null);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
