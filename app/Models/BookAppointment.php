@@ -17,6 +17,7 @@ class BookAppointment extends Model
         'is_completed',
         'payment_mode',
         'transaction_id',
+        'cancellation_reason',
     ];
 
     protected $casts = [
