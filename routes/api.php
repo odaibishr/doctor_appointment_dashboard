@@ -108,6 +108,7 @@ Route::prefix('v1')->group(function () {
                     Route::delete('deleteAppointment/{id}', 'deleteAppointment');
                     Route::get('getUserAppointment', 'getUserAppointment');
                     Route::put('updateAppointmentStatus/{appointment_id}', 'updateAppointmentStatus');
+                    Route::put('rescheduleAppointment/{appointment_id}', 'rescheduleAppointment');
                 });
 
                 // Waitlist Routes

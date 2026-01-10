@@ -73,7 +73,14 @@ class BookAppointmentController extends Controller
         $userId = Auth::id();
 
         $appointments = BookAppointment::where('user_id', $userId)
-            ->with(['doctor', 'schedule', 'transaction'])
+            ->with([
+                'doctor.user',
+                'doctor.specialty',
+                'doctor.hospital',
+                'doctor.schedules.day',
+                'schedule',
+                'transaction'
+            ])
             ->get();
 
         return response()->json([
@@ -108,6 +115,47 @@ class BookAppointmentController extends Controller
         return response()->json([
             'message' => 'Status updated successfully',
             'data' => $appointment
+        ]);
+    }
+
+    public function rescheduleAppointment(Request $request, $appointment_id)
+    {
+        $validated = $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'doctor_schedule_id' => 'nullable|exists:doctor_schedules,id',
+        ]);
+
+        $appointment = BookAppointment::where('id', $appointment_id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$appointment) {
+            return response()->json([
+                'message' => 'Appointment not found'
+            ], 404);
+        }
+
+        if ($appointment->status === 'cancelled') {
+            return response()->json([
+                'message' => 'Cannot reschedule a cancelled appointment'
+            ], 400);
+        }
+
+        if ($appointment->is_completed) {
+            return response()->json([
+                'message' => 'Cannot reschedule a completed appointment'
+            ], 400);
+        }
+
+        $appointment->date = $validated['date'];
+        if (isset($validated['doctor_schedule_id'])) {
+            $appointment->doctor_schedule_id = $validated['doctor_schedule_id'];
+        }
+        $appointment->save();
+
+        return response()->json([
+            'message' => 'Appointment rescheduled successfully',
+            'data' => $appointment->load(['doctor', 'schedule', 'transaction'])
         ]);
     }
 }
