@@ -73,7 +73,7 @@ class BookAppointmentController extends Controller
         $userId = Auth::id();
 
         $appointments = BookAppointment::where('user_id', $userId)
-            ->with(['doctor','schedule','transaction']) 
+            ->with(['doctor', 'schedule', 'transaction'])
             ->get();
 
         return response()->json([
@@ -81,15 +81,16 @@ class BookAppointmentController extends Controller
             'data' => $appointments
         ]);
     }
-    public function updateAppointmentStatus(Request $request, $doctor_id)
+
+
+    public function updateAppointmentStatus(Request $request, $appointment_id)
     {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,confirmed,cancelled'
+        $validated = $request->vaidate([
+            'status' => 'required|in:pending,confirmed,cancelled',
+            'cancellation_reason' => 'nullable|required_if:status,cancelled|string|max:500',
         ]);
 
-        $appointment = BookAppointment::where('id', $doctor_id)
-            ->where('user_id', Auth::id())
-            ->first();
+        $appointment = BookAppointment::where('id', $appointment_id)->where('user_id', Auth::id())->first();
 
         if (!$appointment) {
             return response()->json([
@@ -98,8 +99,12 @@ class BookAppointmentController extends Controller
         }
 
         $appointment->status = $validated['status'];
-        $appointment->save();
 
+        if ($validated['status'] === 'cancelled' && isset($validated['cancellation_reason'])) {
+            $appointment->cancellation_reason = $validated['cancellation_reason'];
+        }
+
+        $appointment->save();
         return response()->json([
             'message' => 'Status updated successfully',
             'data' => $appointment
