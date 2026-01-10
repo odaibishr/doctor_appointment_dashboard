@@ -85,7 +85,7 @@ class BookAppointmentController extends Controller
 
     public function updateAppointmentStatus(Request $request, $appointment_id)
     {
-        $validated = $request->vaidate([
+        $validated = $request->validate([
             'status' => 'required|in:pending,confirmed,cancelled',
             'cancellation_reason' => 'nullable|required_if:status,cancelled|string|max:500',
         ]);
