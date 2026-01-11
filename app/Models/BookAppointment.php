@@ -23,6 +23,7 @@ class BookAppointment extends Model
 
     protected $casts = [
         'is_completed' => 'boolean',
+        'is_returning' => 'boolean',
         'date' => 'date',
     ];
 

@@ -8,6 +8,15 @@ use App\Models\Notification;
 
 class BookAppointmentObserver
 {
+
+    public function creating(BookAppointment $bookAppointment): void {
+        $hasVisited = BookAppointment::where('user_id', $bookAppointment->user_id)
+            ->where('doctor_id', $bookAppointment->doctor_id)
+            ->where('status', '!=', 'cancelled')
+            ->exists();
+
+            $bookAppointment->is_returning = $hasVisited;
+    }
     public function updated(BookAppointment $appointment): void
     {
         if ($appointment->isDirty('status') && $appointment->status === 'cancelled') {
