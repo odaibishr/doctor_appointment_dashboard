@@ -39,6 +39,8 @@ class BookAppointmentController extends Controller
         $validated['status'] = 'pending';
 
         $appointment = BookAppointment::create($validated);
+        $appointment->refresh();
+        $appointment->load(['doctor.user', 'doctor.specialty', 'doctor.hospital', 'schedule.day', 'transaction']);
 
         return response()->json([
             'message' => 'Appointment created successfully',
@@ -81,6 +83,7 @@ class BookAppointmentController extends Controller
                 'schedule',
                 'transaction'
             ])
+            ->orderBy('date', 'desc')
             ->get();
 
         return response()->json([

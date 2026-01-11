@@ -15,6 +15,7 @@ class BookAppointment extends Model
         'date',
         'status',
         'is_completed',
+        'is_returning',
         'payment_mode',
         'transaction_id',
         'cancellation_reason',
@@ -22,6 +23,7 @@ class BookAppointment extends Model
 
     protected $casts = [
         'is_completed' => 'boolean',
+        'is_returning' => 'boolean',
         'date' => 'date',
     ];
 
@@ -46,8 +48,7 @@ class BookAppointment extends Model
     }
 
     public function paymentGatewayDetail()
-{
-    return $this->hasOne(PaymentGatewayDetail::class, 'transaction_id', 'id');
-}
-
+    {
+        return $this->hasOne(PaymentGatewayDetail::class, 'transaction_id', 'id');
+    }
 }
