@@ -31,7 +31,7 @@ class BookAppointmentsTable
 
                 TextColumn::make('schedule.day.day_name')
                     ->label('اليوم')
-                
+
                     ->sortable(),
 
                 TextColumn::make('date')
@@ -42,18 +42,18 @@ class BookAppointmentsTable
                 TextColumn::make('status')
                     ->label('الحالة')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
                         'pending' => 'قيد الانتظار',
                         'confirmed' => 'مؤكد',
                         'cancelled' => 'ملغى',
                         default => $state,
                     })
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'confirmed' => 'success',
                         'cancelled' => 'danger',
                         default => 'warning',
                     })
-                    ->icon(fn (string $state): string => match ($state) {
+                    ->icon(fn(string $state): string => match ($state) {
                         'confirmed' => 'heroicon-m-check-circle',
                         'cancelled' => 'heroicon-m-x-circle',
                         default => 'heroicon-m-clock',
@@ -69,20 +69,27 @@ class BookAppointmentsTable
                     ->trueColor('success')
                     ->falseColor('gray'),
 
+                TextColumn::make('is_returning')
+                    ->label('نوع المريض')
+                    ->badge()
+                    ->formatStateUsing(fn(bool $state): string => $state ? 'مريض عائد' : 'مريض جديد')
+                    ->color(fn(bool $state): string => $state ? 'info' : 'success')
+                    ->icon(fn(bool $state): string => $state ? 'heroicon-m-arrow-uturn-left' : 'heroicon-m-user-plus'),
+
                 TextColumn::make('payment_mode')
                     ->label('طريقة الدفع')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
                         'online' => 'أونلاين',
                         'cash' => 'نقدي',
                         default => $state,
                     })
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'online' => 'info',
                         'cash' => 'success',
                         default => 'gray',
                     })
-                    ->icon(fn (string $state): string => match ($state) {
+                    ->icon(fn(string $state): string => match ($state) {
                         'online' => 'heroicon-m-credit-card',
                         'cash' => 'heroicon-m-banknotes',
                         default => 'heroicon-m-currency-dollar',
@@ -108,7 +115,7 @@ class BookAppointmentsTable
             ])
             ->filters([
                 SelectFilter::make('doctor_id')
-                    ->options(fn (): array => Doctor::query()
+                    ->options(fn(): array => Doctor::query()
                         ->join('users', 'users.id', '=', 'doctors.user_id')
                         ->orderBy('users.name')
                         ->pluck('users.name', 'doctors.id')
@@ -135,18 +142,18 @@ class BookAppointmentsTable
                     ])
                     ->query(function (Builder $query, array $data) {
                         return $query
-                            ->when($data['from'] ?? null, fn ($q) => $q->whereDate('date', '>=', $data['from']))
-                            ->when($data['until'] ?? null, fn ($q) => $q->whereDate('date', '<=', $data['until']));
+                            ->when($data['from'] ?? null, fn($q) => $q->whereDate('date', '>=', $data['from']))
+                            ->when($data['until'] ?? null, fn($q) => $q->whereDate('date', '<=', $data['until']));
                     }),
             ])
             ->recordActions([
                 EditAction::make()
-                    ->visible(fn ($record): bool => auth()->user()?->can('update', $record) ?? false),
+                    ->visible(fn($record): bool => auth()->user()?->can('update', $record) ?? false),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
-                        ->visible(fn (): bool => auth()->user()?->can('deleteAny', \App\Models\BookAppointment::class) ?? false),
+                        ->visible(fn(): bool => auth()->user()?->can('deleteAny', \App\Models\BookAppointment::class) ?? false),
                 ]),
             ]);
     }
